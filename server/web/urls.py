@@ -2,7 +2,7 @@ from django.conf.urls import url
 
 from . import views
 from django.contrib.sitemaps.views import sitemap
-from server.sitemaps import StaticViewSitemap
+from raspango.sitemaps import StaticViewSitemap
 from django.contrib.sitemaps.views import sitemap
 
 sitemaps = {
