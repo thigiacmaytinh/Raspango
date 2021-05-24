@@ -18,6 +18,7 @@ class FaceMask:
     cascade = None
     model = None
     size = (224, 224)
+    drawText = True
 
     
     def __init__(self):
@@ -167,7 +168,7 @@ class FaceMask:
                 
                 cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
 
-                if(result != "Nothing"):
+                if(self.drawText and result != "Nothing"):
                     cv.putText(frame, str(result), (10, 40), cv.FONT_HERSHEY_PLAIN, 3, color, thickness = 2)
                     cv.putText(frame, str(round(elapsed, 2)) + " s", (10, 90), cv.FONT_HERSHEY_PLAIN, 3, color, thickness = 2)
         else:

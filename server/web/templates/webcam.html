@@ -184,7 +184,9 @@ function onDetectSuccess(res)
     g_status = "Ready"
     document.getElementById("loading_icon").style.display = "none"
     document.getElementById("img_result").style.display = "block"
-    document.getElementById("img_result").src = "data:image/png;base64," + res.image_base64    
+    document.getElementById("img_result").src = "data:image/png;base64," + res.image_base64 
+    
+    PrintSuccess("Elapsed: " + res.elapsed + " s")
 }
 
 function onDetectFailed(res)

@@ -30,13 +30,20 @@ def DetectFacemask(request):
         if(not hasNewImage):
             return ErrorResponse("Ảnh không hợp lệ")
 
+        startTime = time.time()
+
+        faceMask.drawText = False
         mat, arr = faceMask.DetectMaskFromImagePath(uploaded_file_abs)
+
+        elapsed = time.time() - startTime
+        elapsed = round(elapsed, 2)
 
         retval, buffer = cv2.imencode('.jpg', mat)
         strBase64 = base64.b64encode(buffer)
         
         return Response(
-            {'image_base64': strBase64},
+            {'image_base64': strBase64,
+            'elapsed' : elapsed},
             status=SUCCESS_CODE,
             content_type="application/json")
 

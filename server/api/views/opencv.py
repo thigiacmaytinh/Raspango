@@ -31,14 +31,20 @@ def DetectFace(request):
 
         SaveImageFromRequest(request, folder, _randFilename)
 
+        startTime = time.time()
+
         mat = cv2.imread(uploaded_file_abs)
         mat, rects = DetectFaceByCascade(mat)
+
+        elapsed = time.time() - startTime
+        elapsed = round(elapsed, 2)
 
         retval, buffer = cv2.imencode('.jpg', mat)
         strBase64 = base64.b64encode(buffer)
         
         return Response(
-            {'image_base64': strBase64},
+            {'image_base64': strBase64,
+            'elapsed' : elapsed},
             status=SUCCESS_CODE,
             content_type="application/json")
         
