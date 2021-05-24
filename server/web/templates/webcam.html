@@ -3,20 +3,47 @@
 {% endblock %} {% block body %}
 
 
-<h2 id="lbl_status" style="color: green;">Webcam stream from backend</h2>
+<!-- <h2 id="lbl_status" style="color: green;">Webcam from frontend</h2>
 <div class="col-md-6">
     <h4 id="backend_time"></h4>
     <h4 id="num_face"></h4>
-</div>
-<div class="col-md-6">
+</div> -->
+<!-- <div class="col-md-6">
     <button id ="btn_stopWebcam" class="btn btn-primary btn-default pull-right"> Stop webcam</button> </br>
+</div> -->
+
+<div class="row">    
+    <div class="col-md-12" style="height: auto;">
+        <div class=" panel panel-primary">
+            <div class="panel-heading">
+                <span id="lbl_total">Webcam from frontend</span>
+            </div>
+            <div class="container-fuid panel-body form-inline">
+                <div class="row">
+                    <div class="col-md-6">   
+                        <center>
+                            <button id ="btn_startWebcam1" class="btn btn-primary btn-default">
+                                <span class="fa fa-camera"></span> Mở webcam</button>
+                            <button id ="btn_takePicture1" class="btn btn-primary btn-default"  style="display: none;">
+                                <span class="fa fa-camera"></span> Chụp ảnh</button>
+                        </center>     
+                    </div>
+                        
+                    <div class="col-md-6">
+                        <center>
+                            <button id ="btn_selectImage1" class="btn btn-primary btn-default">
+                                <span class="fa fa-upload"></span> Chọn ảnh</button>
+                            <canvas id="canvasWebcam1" style="max-width: 100%; display: none;" ></canvas>
+                            <video id="video1" style="max-width: 100%; display: none;">Your browser does not support the video tag.</video>
+                            <input id="uploadImage1" type="file" class="inputFile" style="display: none;"/> 
+                            <img id="img_item1" style="max-width: 100%">
+                        </center>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-
-
-
-<img src="{% url 'video_feed' %}" alt=""/>
-
 
 {% endblock %}
 
@@ -25,20 +52,7 @@
 
 $(document).ready(function () 
 {   
-    if(typeof(EventSource) !== "undefined") 
-    {
-        var source = new EventSource("/stream/");
-        source.onmessage = function(event) {
-            var obj = JSON.parse(event.data);
-            
-            document.getElementById("backend_time").innerText = obj["backend_time"]
-            document.getElementById("num_face").innerText ="Num face: " +  obj["num_face"]          
-        };
-    }
-    else 
-    {
-        document.getElementById("result").innerHTML = "Sorry, your browser does not support server-sent events...";
-    }
+    
 
     $("#btn_stopWebcam").click(function () {
         request_data = {
@@ -57,7 +71,85 @@ $(document).ready(function ()
 
 });
 
+$("#btn_startWebcam1").click(function () {
+    document.getElementById("canvasWebcam1").style.display = "none"
+    document.getElementById("img_item1").style.display = "none"
+    document.getElementById("video1").style.display = "block"
+
+    video = document.querySelector("#video1");
+    if (navigator.mediaDevices.getUserMedia) 
+    {
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function (s) {
+                stream = s
+                video.srcObject = stream;
+                video.play();
+
+                document.getElementById("btn_startWebcam1").style.display = "none"
+                document.getElementById("btn_takePicture1").style.display = "inline"
+            })
+            .catch(function (e) {
+                console.log(e);
+            });
+    }
+})
+
+$("#btn_selectImage1").click(function () {
+    $("#uploadImage1").click()
+})
+
+
+$("#uploadImage1").on('change', function(e){
+    document.getElementById("video1").style.display = "none"
+
+    g_base64_string1 = ""
+    if (this.files && this.files[0]) 
+    {    
+        //load image to canvas
+        var URL = window.URL;
+        var url = URL.createObjectURL(e.target.files[0]);
+
+        img_item1 = document.getElementById("img_item1")
+        img_item1.onload = function()
+        {
+            g_base64_string1 = ResizeImage(img_item1, g_videoWidth)
+            CheckCondition()
+        }
+        img_item1.src = url;        
+
+        document.getElementById("canvasWebcam1").style.display = "none"
+        document.getElementById("img_item1").style.display = "block"
+    }
+})
+
+
+function ResizeImage(img, maxWidth)
+{
+    newWidth = img.width
+    newHeight = img.height
+    
+    if(img.width > maxWidth)
+    {
+        newWidth = maxWidth
+        newHeight = ((img.height * maxWidth ) / img.width)
+    }
+
+    
+
+    // create an off-screen canvas
+    var canvas = document.createElement('canvas'),
+    ctx = canvas.getContext('2d');
+
+    // set its dimension to target size
+    canvas.width = newWidth;
+    canvas.height = newHeight;
+
+    // draw source image into the off-screen canvas:
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+    // encode image to data-uri with base64 version of compressed image
+    return canvas.toDataURL() + "==";
+}
+
 </script>
-{% load static %}
-<!-- <script src="{% static "js/opencv.js" %}"></script> -->
 {% endblock %}

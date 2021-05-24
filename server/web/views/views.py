@@ -56,9 +56,17 @@ def user(request):
     permissions = ["Root", "Admin"]
     return CheckToken(request, 'user.html', permissions)
 
+def camera(request):
+    permissions = ["Root", "Admin", "Gate", "Supporter"]
+    return CheckToken(request, 'camera.html', permissions)
+
 def webcam(request):
     permissions = ["Root", "Admin", "Gate", "Supporter"]
     return CheckToken(request, 'webcam.html', permissions)
+
+def facemask(request):
+    permissions = ["Root", "Admin", "Gate", "Supporter"]
+    return CheckToken(request, 'facemask.html', permissions)
 
 def upload(request):
     permissions = ["Root", "Admin"]
@@ -88,7 +96,6 @@ def CheckToken(request, redirect_page, permissions, args = {}):
         if loginSession != None:
             args['level'] = loginSession["level"]
             args['email'] = loginSession["email"]
-            print(args['email'])
 
             for p in permissions:
                 if(p == loginSession["level"]):

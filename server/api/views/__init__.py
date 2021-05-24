@@ -4,3 +4,4 @@ from .loginsession import GetLoginSession, verifyToken
 from .gpio import SetValue
 from .webcam import StopWebcam
 from .opencv import DetectFace
+from .facemask import DetectFacemask

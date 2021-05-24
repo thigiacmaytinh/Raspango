@@ -23,6 +23,10 @@ import threading
 @api_view(["POST"])           
 def StopWebcam(request):
     try:
+        
+
+        
+
         djangoSettings.PLAY_WEBCAM = False
 
         return SuccessResponse("Stop thành công")

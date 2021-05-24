@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^gpio/set$', views.SetValue),
     url(r'^webcam/stop$', views.StopWebcam),
     url(r'^opencv/detectface$', views.DetectFace),
+    url(r'^facemask/detect$', views.DetectFacemask),
 ]

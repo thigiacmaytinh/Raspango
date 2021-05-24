@@ -1,0 +1,5 @@
+Hand
+Mask
+No mask
+Nothing
+Wrong

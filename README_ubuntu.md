@@ -3,3 +3,5 @@ Source code web server dùng để cung cấp API xử lý ảnh. Sử dụng Dj
 
 
 # Bước 1: cài đặt các thư viện cần thiết
+
+sudo apt install libgl1-mesa-glx
