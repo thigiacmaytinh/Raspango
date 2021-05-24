@@ -142,7 +142,7 @@ def ChangePassword(request):
             loginSession = FindLoginSession(_token)
         
 
-        _email = loginSession.email
+        _email = loginSession["email"]
         _password = request.POST.get('password')
         hashed_password = HashPassword(_password)
         _newPassword = request.POST.get('newPassword')
@@ -156,8 +156,6 @@ def ChangePassword(request):
         user.password = hashed_newpassword
         user.save()
 
-        loginSession.isDeleted = True
-        loginSession.save()
         
         return SuccessResponse("Đổi mật khẩu thành công")
     except Exception as e:
