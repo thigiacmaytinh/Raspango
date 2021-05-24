@@ -7,8 +7,9 @@ from django.conf import settings as djangoSettings
 currentPath = os.path.abspath(__file__)
 IS_LINUX = currentPath[0] == '/'
 IS_WINDOWS = currentPath[1] == ':'
+IS_RASPBERRY_PI = False
 
-if(IS_LINUX):
+if(IS_RASPBERRY_PI):
     import RPi.GPIO as GPIO
 
 #from api.models import Option
@@ -27,7 +28,7 @@ MAX_DISTANCE = 100
 ###################################################################################################
 
 def InitSensor():
-    if(not IS_LINUX):
+    if(not IS_RASPBERRY_PI):
         return
     GPIO.setwarnings(False)
     GPIO.setmode(GPIO.BCM)
