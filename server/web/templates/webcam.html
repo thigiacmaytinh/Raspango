@@ -1,42 +1,58 @@
 {% extends 'base.html' %} {% block head %}
-<title>Xem webcam</title>
+<title>Webcam from frontend</title>
 {% endblock %} {% block body %}
 
-
-<!-- <h2 id="lbl_status" style="color: green;">Webcam from frontend</h2>
-<div class="col-md-6">
-    <h4 id="backend_time"></h4>
-    <h4 id="num_face"></h4>
-</div> -->
-<!-- <div class="col-md-6">
-    <button id ="btn_stopWebcam" class="btn btn-primary btn-default pull-right"> Stop webcam</button> </br>
-</div> -->
 
 <div class="row">    
     <div class="col-md-12" style="height: auto;">
         <div class=" panel panel-primary">
             <div class="panel-heading">
-                <span id="lbl_total">Webcam from frontend</span>
+                <span id="lbl_total">Webcam from frontend</span>                
             </div>
             <div class="container-fuid panel-body form-inline">
+                
+                <div class="row">
+                    <center>
+                        <button id ="btn_compare" class="btn btn-primary btn-success" style="font-size: 2em;" disabled>
+                            <span class="fa fa-compress-alt"></span> Detect face</button>
+                    </center>
+                </div>
+                <div class="row">
+                    <center> 
+                        <div class="col-md-12" style="margin-top: 10px; margin-bottom: 10px;" >
+                            <h3 id="lbl_status" style="color: green;">Ready</h3>
+                            <div id="loading_icon"  class="spinner-border text-success"  role="status" style="width: 50px; height: 50px; display: none;"></div>
+                        </div>        
+                    </center>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">   
+                        <center> 
+                            <button id ="btn_startWebcam" class="btn btn-primary btn-default">
+                                <span class="fa fa-camera"></span> Start webcam</button>
+                            <button id ="btn_takePicture" class="btn btn-primary btn-default"  style="display: none;">
+                                <span class="fa fa-camera"></span> Take picture</button>                         
+                        </center>
+                    </div>
+                    <div class="col-md-6">   
+                        <center><h3>Result</h3> </center>                        
+                    </div>
+                    
+                </div>
                 <div class="row">
                     <div class="col-md-6">   
                         <center>
-                            <button id ="btn_startWebcam1" class="btn btn-primary btn-default">
-                                <span class="fa fa-camera"></span> Mở webcam</button>
-                            <button id ="btn_takePicture1" class="btn btn-primary btn-default"  style="display: none;">
-                                <span class="fa fa-camera"></span> Chụp ảnh</button>
+                            <canvas id="canvasWebcam" style="max-width: 100%; display: none;" ></canvas>
+                            <video id="video1" style="max-width: 100%; display: none;">Your browser does not support the video tag.</video>
+         
+                            <input id="uploadImage1" type="file" class="inputFile" style="display: none;"/> 
+                            <img id="img_source" style="max-width: 100%">
                         </center>     
                     </div>
                         
                     <div class="col-md-6">
                         <center>
-                            <button id ="btn_selectImage1" class="btn btn-primary btn-default">
-                                <span class="fa fa-upload"></span> Chọn ảnh</button>
-                            <canvas id="canvasWebcam1" style="max-width: 100%; display: none;" ></canvas>
-                            <video id="video1" style="max-width: 100%; display: none;">Your browser does not support the video tag.</video>
-                            <input id="uploadImage1" type="file" class="inputFile" style="display: none;"/> 
-                            <img id="img_item1" style="max-width: 100%">
+                            <img id="img_result" style="max-width: 100%">
                         </center>
                     </div>                    
                 </div>
@@ -50,30 +66,40 @@
 {% block scripts %}
 <script>
 
+g_videoWidth = 640
+g_videoHeight = 480
+
+g_startTime = new Date();
+g_endTime = new Date();
+
+g_status = "Ready"
 $(document).ready(function () 
 {   
-    
 
-    $("#btn_stopWebcam").click(function () {
-        request_data = {
-                            "token": Cookies.get("token")
-                        }                
-        host_request = gethost() + '/api/webcam/stop'
-        ajaxRequest("POST", host_request ,request_data, onStopSuccess, genericFailCB)
-    })
-
-    function onStopSuccess(res)
+    aspect = window.screen.availWidth / window.screen.availHeight
+    if(aspect < 1)
     {
-        document.getElementById("lbl_status").innerText = "Webcam stopped"
+        g_videoWidth = 480
+        g_videoHeight = 640
     }
-
-
 
 });
 
-$("#btn_startWebcam1").click(function () {
-    document.getElementById("canvasWebcam1").style.display = "none"
-    document.getElementById("img_item1").style.display = "none"
+function PrintSuccess(msg)
+{
+    document.getElementById("lbl_status").innerText = msg
+    document.getElementById("lbl_status").style.color = "green"
+}
+
+function PrintError(msg)
+{
+    document.getElementById("lbl_status").innerText = msg
+    document.getElementById("lbl_status").style.color = "red"
+}
+
+$("#btn_startWebcam").click(function () {
+    document.getElementById("canvasWebcam").style.display = "none"
+    document.getElementById("img_source").style.display = "none"
     document.getElementById("video1").style.display = "block"
 
     video = document.querySelector("#video1");
@@ -85,8 +111,8 @@ $("#btn_startWebcam1").click(function () {
                 video.srcObject = stream;
                 video.play();
 
-                document.getElementById("btn_startWebcam1").style.display = "none"
-                document.getElementById("btn_takePicture1").style.display = "inline"
+                document.getElementById("btn_startWebcam").style.display = "none"
+                document.getElementById("btn_takePicture").style.display = "inline"
             })
             .catch(function (e) {
                 console.log(e);
@@ -94,61 +120,77 @@ $("#btn_startWebcam1").click(function () {
     }
 })
 
-$("#btn_selectImage1").click(function () {
-    $("#uploadImage1").click()
-})
-
-
-$("#uploadImage1").on('change', function(e){
+$("#btn_takePicture").click(function () 
+{    
+    document.getElementById("canvasWebcam").style.display = "block"
+    document.getElementById("btn_startWebcam").style.display = "inline"
+    document.getElementById("btn_takePicture").style.display = "none"
     document.getElementById("video1").style.display = "none"
 
-    g_base64_string1 = ""
-    if (this.files && this.files[0]) 
-    {    
-        //load image to canvas
-        var URL = window.URL;
-        var url = URL.createObjectURL(e.target.files[0]);
+    canvas = document.getElementById('canvasWebcam');
+    var context = canvas.getContext('2d');
+    canvas.width = g_videoWidth;
+    canvas.height = g_videoHeight;
+    context.drawImage(video, 0, 0, g_videoWidth, g_videoHeight);	
 
-        img_item1 = document.getElementById("img_item1")
-        img_item1.onload = function()
-        {
-            g_base64_string1 = ResizeImage(img_item1, g_videoWidth)
-            CheckCondition()
-        }
-        img_item1.src = url;        
+    
+    video = document.querySelector("#video1");
+    video.pause();
+    video.srcObject=null;
+    stream.getVideoTracks()[0].stop();
 
-        document.getElementById("canvasWebcam1").style.display = "none"
-        document.getElementById("img_item1").style.display = "block"
-    }
+    g_base64_string1 = canvas.toDataURL() + "=="
+
+    CheckCondition()
 })
 
 
-function ResizeImage(img, maxWidth)
+function CheckCondition()
 {
-    newWidth = img.width
-    newHeight = img.height
-    
-    if(img.width > maxWidth)
+    if(g_base64_string1 == "")
     {
-        newWidth = maxWidth
-        newHeight = ((img.height * maxWidth ) / img.width)
+        document.getElementById("btn_compare").disabled = true
     }
+    else
+    {
+        document.getElementById("btn_compare").disabled = false
+    }
+}
 
+$("#btn_compare").click(function () {    
+    if(g_status != "Ready")
+        return
+
+    PrintSuccess("")
     
+    document.getElementById("loading_icon").style.display = "block"
 
-    // create an off-screen canvas
-    var canvas = document.createElement('canvas'),
-    ctx = canvas.getContext('2d');
+    g_status = "Sending"
+    g_startTime = new Date()
 
-    // set its dimension to target size
-    canvas.width = newWidth;
-    canvas.height = newHeight;
+    g_base64_string1 = g_base64_string1.replace("data:image/jpeg;base64,", "")
+    g_base64_string1 = g_base64_string1.replace("data:image/png;base64,", "")
 
-    // draw source image into the off-screen canvas:
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    var myFormData = new FormData();
+    myFormData.append('imageBase64', g_base64_string1);
+    myFormData.append("isBase64", "True");
+    
+    host_request = gethost() + '/api/opencv/detectface'
+    ajaxUpload("POST", host_request, myFormData, onDetectSuccess, onDetectFailed);
+})
 
-    // encode image to data-uri with base64 version of compressed image
-    return canvas.toDataURL() + "==";
+function onDetectSuccess(res)
+{
+    g_status = "Ready"
+    document.getElementById("loading_icon").style.display = "none"
+    document.getElementById("img_result").style.display = "block"
+    document.getElementById("img_result").src = "data:image/png;base64," + res.image_base64    
+}
+
+function onDetectFailed(res)
+{
+    document.getElementById("loading_icon").style.display = "none"
+    ShowToast(res["responseJSON"]["Error"])
 }
 
 </script>

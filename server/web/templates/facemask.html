@@ -1,5 +1,5 @@
 {% extends 'base.html' %} {% block head %}
-<title>Xem webcam</title>
+<title>Kiểm tra khẩu trang</title>
 {% endblock %} {% block body %}
 
 
@@ -16,7 +16,7 @@
     <div class="col-md-12" style="height: auto;">
         <div class=" panel panel-primary">
             <div class="panel-heading">
-                <span id="lbl_total">Webcam from frontend</span>                
+                <span id="lbl_total">Kiểm tra khẩu trang</span>                
             </div>
             <div class="container-fuid panel-body form-inline">
                 
@@ -37,11 +37,11 @@
                 <div class="row">
                     <div class="col-md-6">   
                         <center> 
-                            <button id ="btn_startWebcam1" class="btn btn-primary btn-default">
+                            <button id ="btn_startWebcam" class="btn btn-primary btn-default">
                                 <span class="fa fa-camera"></span> Start webcam</button>
-                            <button id ="btn_takePicture1" class="btn btn-primary btn-default"  style="display: none;">
+                            <button id ="btn_takePicture" class="btn btn-primary btn-default"  style="display: none;">
                                 <span class="fa fa-camera"></span> Take picture</button>
-                            <button id ="btn_selectImage1" class="btn btn-primary btn-default">
+                            <button id ="btn_selectImage" class="btn btn-primary btn-default">
                                 <span class="fa fa-upload"></span> Select image</button>      
                         </center>
                     </div>
@@ -53,10 +53,10 @@
                 <div class="row">
                     <div class="col-md-6">   
                         <center>
-                            <canvas id="canvasWebcam1" style="max-width: 100%; display: none;" ></canvas>
+                            <canvas id="canvasWebcam" style="max-width: 100%; display: none;" ></canvas>
                             <video id="video1" style="max-width: 100%; display: none;">Your browser does not support the video tag.</video>
          
-                            <input id="uploadImage1" type="file" class="inputFile" style="display: none;"/> 
+                            <input id="uploadImage" type="file" class="inputFile" style="display: none;"/> 
                             <img id="img_source" style="max-width: 100%">
                         </center>     
                     </div>
@@ -108,8 +108,8 @@ function PrintError(msg)
     document.getElementById("lbl_status").style.color = "red"
 }
 
-$("#btn_startWebcam1").click(function () {
-    document.getElementById("canvasWebcam1").style.display = "none"
+$("#btn_startWebcam").click(function () {
+    document.getElementById("canvasWebcam").style.display = "none"
     document.getElementById("img_source").style.display = "none"
     document.getElementById("video1").style.display = "block"
 
@@ -122,8 +122,8 @@ $("#btn_startWebcam1").click(function () {
                 video.srcObject = stream;
                 video.play();
 
-                document.getElementById("btn_startWebcam1").style.display = "none"
-                document.getElementById("btn_takePicture1").style.display = "inline"
+                document.getElementById("btn_startWebcam").style.display = "none"
+                document.getElementById("btn_takePicture").style.display = "inline"
             })
             .catch(function (e) {
                 console.log(e);
@@ -131,14 +131,14 @@ $("#btn_startWebcam1").click(function () {
     }
 })
 
-$("#btn_takePicture1").click(function () 
+$("#btn_takePicture").click(function () 
 {    
-    document.getElementById("canvasWebcam1").style.display = "block"
-    document.getElementById("btn_startWebcam1").style.display = "inline"
-    document.getElementById("btn_takePicture1").style.display = "none"
+    document.getElementById("canvasWebcam").style.display = "block"
+    document.getElementById("btn_startWebcam").style.display = "inline"
+    document.getElementById("btn_takePicture").style.display = "none"
     document.getElementById("video1").style.display = "none"
 
-    canvas = document.getElementById('canvasWebcam1');
+    canvas = document.getElementById('canvasWebcam');
     var context = canvas.getContext('2d');
     canvas.width = g_videoWidth;
     canvas.height = g_videoHeight;
@@ -155,12 +155,12 @@ $("#btn_takePicture1").click(function ()
     CheckCondition()
 })
 
-$("#btn_selectImage1").click(function () {
-    $("#uploadImage1").click()
+$("#btn_selectImage").click(function () {
+    $("#uploadImage").click()
 })
 
 
-$("#uploadImage1").on('change', function(e){
+$("#uploadImage").on('change', function(e){
     document.getElementById("video1").style.display = "none"
 
     g_base64_string1 = ""
@@ -178,7 +178,7 @@ $("#uploadImage1").on('change', function(e){
         }
         img_source.src = url;        
 
-        document.getElementById("canvasWebcam1").style.display = "none"
+        document.getElementById("canvasWebcam").style.display = "none"
         document.getElementById("img_source").style.display = "block"
     }
 })
@@ -258,6 +258,10 @@ function onDetectFailed(res)
 {
     document.getElementById("loading_icon").style.display = "none"
     ShowToast(res["responseJSON"]["Error"])
+
+    setTimeout(function (){
+        location.reload();
+    }, 1000);
 }
 
 </script>
