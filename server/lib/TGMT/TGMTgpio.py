@@ -4,7 +4,8 @@ from django.conf import settings as djangoSettings
 import threading
 import time, datetime
 from django.conf import settings as djangoSettings
-if(djangoSettings.IS_LINUX):
+
+if(djangoSettings.IS_RASPBERRY_PI):
     import RPi.GPIO as GPIO
 
 class TGMTgpio(threading.Thread):

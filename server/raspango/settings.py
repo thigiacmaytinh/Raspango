@@ -19,6 +19,7 @@ import time
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 IS_LINUX = BASE_DIR[0] == '/'
 IS_WINDOWS = BASE_DIR[1] == ':'
+IS_RASPBERRY_PI = False
 
 PROJECT_DIR = os.path.join(BASE_DIR, "..", "..")
 DEBUG = True
