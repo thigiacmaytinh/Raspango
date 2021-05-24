@@ -1,0 +1,138 @@
+{% extends 'base.html' %} {% block head %}
+<title>Shield relay</title>
+{% endblock %} {% block body %}
+<br/>
+
+
+
+<!-- query panel -->
+<div class=" panel panel-primary">
+    <div class="panel-heading">
+        Điều khiển shield relay
+    </div>
+    <div class="container-fuid panel-body form-inline" style="padding: 0px !important;">
+            <div id="div_org" class="col-md-6 col-xs-6 col-lg-3" >
+                </br>
+                <img src="/static/img/relay-board.png" style="max-width: 100%;">
+                </br></br>
+            </div>
+            <div class="col-md-6 col-lg-5">
+                <div class="table-responsive">
+                    
+                    <table class="table" id="table_appear" style="width: 100%;">
+                        <thead class="bg-info">
+                            <tr> 
+                                <th class="col-md-4">STT</th>     
+                                <th class="col-md-4">Delay(ms)</th>                                
+                                <th class="col-md-4">Click</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><b>Relay 1 </br>GPIO19</b></td> 
+                                <td><input type="text" class="form-control" id="txt_delay1" value="50" style="width:60px"></td>                                
+                                <td><button id ="btn_press1" class="btn btn-primary btn-default"> Press</button></td>
+                            </tr>
+                            <tr>
+                                <td><b>Relay 2 </br>GPIO26</b></td>
+                                <td><input type="text" class="form-control" id="txt_delay2" value="50" style="width:60px"></td>                                
+                                <td><button id ="btn_press2" class="btn btn-primary btn-default"> Press</button></td>
+                            </tr>
+                            <tr>
+                                <td><b>Relay 3 </br>GPIO20</b></td> 
+                                <td><input type="text" class="form-control" id="txt_delay3" value="50" style="width:60px"></td>                                
+                                <td><button id ="btn_press3" class="btn btn-primary btn-default"> Press</button></td>
+                            </tr>
+                            <tr>
+                                <td><b>Relay 4 </br>GPIO21</b></td> 
+                                <td><input type="text" class="form-control" id="txt_delay4" value="50" style="width:60px"></td>                                
+                                <td><button id ="btn_press4" class="btn btn-primary btn-default"> Press</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- <a id="btn_showPanel" href="#0" class="js-cd-panel-trigger" data-panel="main" style="visibility: hidden;">Fire Panel</a> -->
+            
+
+    </div>
+</div>
+<!-- query panel end -->
+
+
+
+{% endblock %} {% block scripts %}
+<script>
+
+$(document).ready(function () 
+{
+    SetDate($('#txt_from_date'))
+    SetDate($('#txt_to_date'))
+
+    g_persons = null
+    g_appear_pk = null
+    g_currentPage = 1
+    g_numPage = 0
+    g_contentPerPage = 30
+    jwt = null
+
+    //VerifyToken(onVerifySuccess, onVerifyFailed)        
+    
+
+    function onVerifySuccess(res)
+    {
+    }
+
+    function onVerifyFailed(res)
+    {
+    }
+
+    function SearchParam()
+    {
+        var strSearch = findGETParameter("q")        
+        if(strSearch != null && strSearch != "")
+        {
+            $("#txt_search").val(strSearch)
+            GetPerson()
+        }        
+    }
+
+    $("#btn_press1").click(function () {
+        SetValue(35, $("#txt_delay1").val())
+    })
+
+    $("#btn_press2").click(function () {
+        SetValue(37, $("#txt_delay2").val())
+    })
+
+    $("#btn_press3").click(function () {
+        SetValue(38, $("#txt_delay3").val())
+    })
+
+    $("#btn_press4").click(function () {
+        SetValue(40, $("#txt_delay4").val())
+    })
+
+    function SetValue(gpio_pin, delay)
+    {       
+        host_request = gethost() + '/api/gpio/set'
+        request_data = {      
+            "gpio_pin": gpio_pin,
+            "delay": delay,
+            "triggerValue" : 0,
+            "token": Cookies.get("token")
+        }
+        cachedRequest = request_data
+        ajaxRequest("POST", host_request , request_data, onSetValueSuccess, genericFailCB)
+    }
+
+    function onSetValueSuccess(res)
+    {
+        ShowToast(res.Success)
+    }
+
+    
+});
+
+</script> {% endblock %}

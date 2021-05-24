@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% block head %}
+<title>Đăng nhập</title>
+{% endblock %}
+
+{% block body %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="login-panel panel panel-green">
+                    <div class="panel-heading">
+                        <h3 class="panel-title lead">Đăng nhập tài khoản</h3>   
+                    </div>
+                    <div class="panel-body">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="far fa-envelope"></i></span>
+                            <input class="form-control" placeholder="email" id="txt_email" type="text" autofocus>
+                        </div>
+                        </br>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fas fa-key"></i></span>
+                            <input class="form-control" placeholder="Mật khẩu" id="txt_password" type="password" value="">
+                        </div>
+                        </br>
+                        <!-- Change this to a button or input when using this as a form -->
+                        <button type="submit" id ="login" class="btn btn-lg btn-success btn-block"><span class="glyphicon glyphicon-off"></span> Đăng nhập</button>
+                        </br>
+                    </div>
+                    <div class="panel-footer">
+                        <a  class="pull-left" data-toggle="modal" href="#reset_password_modal">Quên mật khẩu</a>
+                        <a class="pull-right" href="/register">Đăng ký</a>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  <!-- Modal Forget password  -->
+
+  <div class="modal fade " id="reset_password_modal" role="dialog">
+        <div class="modal-dialog ">
+
+                <!-- Modal content-->
+                <div class="modal-content panel-primary">
+                <div class="modal-header panel-heading">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Thiết lập lại mật khẩu</h4>
+                </div>
+                <div class="modal-body panel-body">
+                    <div class="row">            
+                        <div class="col-md-12">
+                            <form role="form" id="frm_reset_password">                                    
+                                <div class="form-group">   
+                                    <input type="text" class="form-control" id="txt_email2" placeholder="email đã được đăng ký*">                                                
+                                </div>                                   
+                            </form>                            
+                            <div class="row">
+                                <div class="col-md-12 center-block">
+                                    <button id="btn_resetPassword" class="btn btn-primary center-block">Gửi</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>             
+                </div> <!-- end modal body-->        
+                </div>
+            </div>
+    </div>
+    
+    
+        
+</div>
+{% endblock %}
+
+{% block scripts %}
+
+
+<script>
+$(document).ready(function() {
+    function Login()
+    {
+       
+        if($("#txt_email").val() == "" ||
+            $("#txt_password").val() == "")
+            {
+                showError("Thiếu email hoặc password")
+                return
+            }
+        request_data = {
+                            "email": $("#txt_email").val(),
+                            "password": $("#txt_password").val()
+                        }                
+        host_request = gethost() + '/api/user/login'
+        ajaxRequest("POST", host_request ,request_data, onLoginSuccess, onLoginFailed)
+    }
+
+    function onLoginSuccess(res)
+    {        
+        Cookies.set('email', res["email"], { expires: 7 });
+        Cookies.set('token',res["token"], { expires: 7 });
+        window.location.href = "/";
+    }
+    
+    function onLoginFailed(res)
+    {
+        showError(res["responseJSON"]["Error"])
+    }
+
+    $("#login").click(function() {
+        Login()
+    });
+
+    $(document).keydown(function(e)
+    {
+        if(e.which == 13)
+        {
+            Login()
+        }        
+    })
+
+    $("#btn_resetPassword").click(function() {
+        request_data = {
+                            "email": $("#txt_email2").val()
+                        }                
+        host_request = gethost() + '/api/user/SendEmailResetPassword'
+        ajaxRequest("POST", host_request ,request_data, onSendSuccess, onLoginFailed)
+    });
+
+    function onSendSuccess(res)
+    {
+        showNotice(res["Success"])
+        $("#reset_password_modal").modal("hide")        
+    }
+});
+
+</script>
+
+{% endblock %}

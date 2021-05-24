@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+{% block head %}
+<title>Đăng ký tài khoản</title>
+{% endblock %}
+{% block body %}
+<br/>
+
+<div class="col-md-6 col-md-offset-3" id="frm_main"> 
+    <div class="panel panel-green">
+        <div class="panel-heading">            
+            <span id="lbl_header">Đăng ký sử dụng</span>
+        </div>
+        <div class="panel-body">
+            <div class="form-group" >
+                <div id="div_personal">                   
+
+                    <div class="form-group input-group">
+                        <span class="input-group-addon"><i class="far fa-envelope"></i></span>
+                        <input type="text" placeholder="Email người đại diện * (dùng để đăng nhập)" id='txt_email' required class="form-control">
+                    </div>
+
+                    <div class="form-group input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <input type="text" placeholder="Họ tên người đại diện*" id='txt_name' required class="form-control" > 
+                    </div>
+
+                    <div class="form-group input-group">
+                        <span class="input-group-addon"><i class="fas fa-key"></i></span>
+                        <input type="password" placeholder="Mật khẩu *" id='txt_password' required class="form-control" >
+                    </div> 
+    
+                    <div class="form-group input-group">
+                        <span class="input-group-addon"><i class="fas fa-key"></i></span>
+                        <input type="password" placeholder="Xác thực mật khẩu *" id='txt_password2' required class="form-control">
+                    </div>                       
+    
+                    <div id="div_phone">
+                        <div class="form-group input-group" >
+                            <span class="input-group-addon"><i class="fa fa-phone"></i></span>
+                            <input type="text" placeholder="Số điện thoại*" id='txt_phone' required class="form-control" onkeypress='AllowNumberOnly(event)'> 
+                        </div>
+                    </div>  
+
+        
+                <input type="checkbox" id="chk_agree" class="custom-checkbox" > Tôi đồng ý với các <a target="blank" href="/terms"> điều khoản sử dụng </a></br></br>
+                
+                <center><button type="submit" id ="btn_register" class="btn btn-success btn-default" disabled>Đăng ký tài khoản</button>  </center>
+                <a href="/login"><span class="fa fa-power-off"></span> Đăng nhập nếu đã có tài khoản</a>
+            </div>
+        </div>
+    </div>
+</div>
+              
+
+<!-- created modals -->
+<div class="modal fade" id="modal_select" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content panel-green">
+            <div class="modal-header panel-heading">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 id="lbl_title">Lựa chọn loại hình tài khoản phù hợp với bạn</h4>
+            </div>
+            <div class="modal-body panel-body">            
+                <div class="row">
+                    <div class="col-md-12">
+
+                            <div class="form-group input-group">                            
+                                <input type="radio" name="role" id="rd_personal"> Cá nhân &nbsp;&nbsp;
+                                <input type="radio" name="role" id="rd_org"> Tổ chức        &nbsp;&nbsp;   
+                                <input type="radio" name="role" id="rd_staff"> Nhân viên <br>
+                            </div>
+                            <button type="submit" id ="btn_select" class="btn btn-success btn-default pull-right" disabled>OK</button>             
+                    </div>
+                </div>            
+            </div> <!-- end modal body-->    
+        </div>
+    </div>
+</div> 
+<!-- modals end -->
+
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+
+    $("#btn_register").click(function() {
+        if(! ValidateEmail($("#txt_email").val())) 
+        {
+            showError("Sai format email")
+            return
+        }
+
+        if(!checkVerifyPassword($("#txt_password").val(), $("#txt_password2").val())) 
+        {
+            showError("Mật khẩu không khớp")
+            return
+        }
+
+        if ($("#txt_name").val()=="")
+        {
+            showError("Chưa nhập họ tên")
+            return
+        }
+
+        servicePack = "Free"
+
+        
+        request_data = {
+                        "references": $("#txt_references").val(),
+                        "email": $("#txt_email").val(),                        
+                        "name": $("#txt_name").val(),
+                        "password": $("#txt_password").val(),
+                        "phone": $("#txt_phone").val()                    
+                    }
+        host_request = gethost() + '/api/user/register'
+    
+        ajaxRequest("POST", host_request ,request_data, onRegisterSuccess, genericFailCB)
+    });
+
+    function checkVerifyPassword(pass1, pass2)
+    {
+        return (pass1==pass2)
+    }
+
+    function onRegisterSuccess(res) 
+    {        
+        showNotice(res.Success)
+    }
+
+    $("#rd_personal").change(function() {      
+        if(document.getElementById("rd_personal").checked)
+        {            
+            document.getElementById("lbl_header").innerText = "Đăng ký tài khoản cá nhân"
+            $("#div_address").show()
+            $('#txt_address').attr('placeholder','Địa chỉ')            
+            
+            $("#div_personalID").show()            
+            $("#div_tax").show()
+            $("#div_faxOrg").hide()
+
+            document.getElementById("btn_select").disabled = false
+        }
+    });
+
+    $("#rd_org").change(function() {  
+        if(document.getElementById("rd_org").checked)
+        {
+            document.getElementById("lbl_header").innerText = "Đăng ký tài khoản tổ chức"
+            document.getElementById("lbl_bank").innerText = "Tài khoản ngân hàng của tổ chức"
+                    
+
+            $("#div_org").show()
+            $("#div_personalID").hide()
+            $("#div_notice").show()
+            
+            document.getElementById("btn_select").disabled = false
+        }     
+    });
+
+    $("#rd_staff").change(function() {  
+        if(document.getElementById("rd_staff").checked)
+        {
+            document.getElementById("lbl_header").innerText = "Đăng ký tài khoản nhân viên"
+
+            $("#div_tax").hide()
+            $("#div_bank").hide()                
+            $("#div_personalID").hide()
+
+            document.getElementById("btn_select").disabled = false
+        }   
+    });
+
+    $("#chk_agree").change(function() {            
+        document.getElementById("btn_register").disabled = !this.checked;
+    });
+
+    $("input[name='purpose']").change(function(e){
+        g_purpose = $(this).val()
+    });
+});
+
+</script>
+
+{% endblock %}

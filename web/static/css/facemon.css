@@ -1,0 +1,145 @@
+.column-upload {
+  float: left;
+  /* width: 33.33%; */
+  padding: 5px;
+}
+
+/* Clear floats after image containers */
+.row-upload::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.box-border {
+  border: solid 1px;
+  border-radius: 5px;
+  padding: 5px;
+  border-color: #ccc;
+}
+
+input[type="checkbox"]{
+  width: 20px;
+  height: 20px;
+}
+
+input[type="radio"]{
+  width: 20px;
+  height: 20px;
+}
+
+.tooltip-arrow,
+.tooltip-inner {background-color: #0d599b;}
+
+#div_logo *
+{
+  color: green !important;
+}
+
+#microbe_detail_title1 *
+{
+  color: red !important;
+}
+
+#microbe_detail_title2 *
+{
+  color: green !important;
+}
+
+#microbe_detail_title4 *
+{
+  color: green !important;
+}
+@media print
+{
+  #page-wrapper
+  {    
+    font-family: 'Times New Roman';
+    font-size: 12px !important;
+    -webkit-print-color-adjust: exact !important;
+    margin: 0 0 0 0px !important;    
+  }
+
+  .table td.bg-primary
+  {
+    color: white !important;
+    background-color: #337ab7 !important;
+  }
+
+  .table td.bg-info
+  {
+    background-color: #d9edf7 !important;
+  }
+
+  #microbe_detail_title2 *
+  {
+    font-size: 17px !important;
+  }
+
+  #microbe_detail_title3 *
+  {
+    font-size: 16px !important;
+  }
+
+  #microbe_detail_title4 *
+  {
+    font-size: 30px !important;
+  }
+
+  a[href]:after{
+    content:"";
+  }
+}
+
+@-webkit-keyframes spinner-border {
+  to {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinner-border {
+  to {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+.spinner-border {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  vertical-align: text-bottom;
+  border: 0.25em solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  -webkit-animation: spinner-border .75s linear infinite;
+  animation: spinner-border .75s linear infinite;
+}
+
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+  border-width: 0.2em;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.sr-only-focusable:active, .sr-only-focusable:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}

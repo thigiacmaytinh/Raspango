@@ -1,0 +1,125 @@
+{% extends 'base.html' %} {% block head %}
+<title>System info </title>
+{% endblock %} {% block body %}
+<br/>
+<div class="row">
+    <div class="col-md-6" >
+        <div id="canvas-holder">
+            <div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand">
+                <div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+            <canvas id="chart-area" style="display: block; width: 100%; height: 400;"  class="chartjs-render-monitor"></canvas>
+        </div>
+    </div>
+</div>
+
+
+</br>
+
+<div class="panel panel-success" id="search_result">
+    <div class="panel-heading">
+        Thông số hệ thống: <span id="backend_time"></span> 
+    </div>
+    <div class="panel-body">
+        <table class="table" id="table_person">
+            <thead class="bg-info">
+                <tr>
+                    <th>STT</th>
+                    <th>Name</th> 
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="trow" >
+                    <td>1</td>
+                    <td>OpenCV version</td>
+                    <td>{{opencv_version}}</td>                    
+                </tr>
+                <tr class="trow">
+                    <td>2</td>                    
+                    <td>Django version</td>
+                    <td>{{django_version}}</td>
+                </tr>
+                <tr class="trow">
+                    <td>3</td>                    
+                    <td>Cascade loaded</td>
+                    <td id="is_cascade_loaded"></td>
+                </tr>
+            </tbody>
+        </table>
+        
+    </div>
+</div>
+
+{% endblock %} {% block scripts %}
+<script>
+
+$(document).ready(function () 
+{
+    if(typeof(EventSource) !== "undefined") 
+    {
+        var source = new EventSource("/stream/");
+        source.onmessage = function(event) {
+            var obj = JSON.parse(event.data);
+            
+            document.getElementById("backend_time").innerText = obj["backend_time"];        
+        };
+    }
+    else 
+    {
+        document.getElementById("result").innerHTML = "Sorry, your browser does not support server-sent events...";
+    }
+
+    var config = {
+        type: 'doughnut',
+        data: {
+            datasets: [{
+                data: [],
+                backgroundColor: [],
+                label: 'Dataset 1'
+            }],
+            labels: []
+        },
+        options: {
+            responsive: true,
+            legend: {
+                position: 'top',
+            },
+            title: {
+                display: true,
+                text: 'Dung lượng ổ cứng'
+            },
+            animation: {
+                animateScale: true,
+                animateRotate: true
+            }
+        }
+    };
+
+    var ctx = document.getElementById('chart-area').getContext('2d');
+    window.myDoughnut = new Chart(ctx, config);
+    var colorNames = Object.keys(window.chartColors);
+
+    config.data.labels.push("Còn trống: " + "{{freeDiskSize}}" + " GB");
+    config.data.labels.push("Đã sử dụng: " + "{{usedDiskSize}}" + " GB");
+    
+    
+    config.data.datasets.forEach(function(dataset) {
+        dataset.data.push("{{freeDiskSize}}");
+        dataset.backgroundColor.push("green");
+        
+    });
+    config.data.datasets.forEach(function(dataset) {
+        dataset.data.push("{{usedDiskSize}}");
+        dataset.backgroundColor.push("red");
+    });
+
+    window.myDoughnut.update();
+
+
+    iconSuccess = '<i class="fa fa-check text-success"></i>'
+    iconError = '<i class="fa fa-times text-danger"></i>'
+
+    $("#is_cascade_loaded").html("{{cascade_loaded}}" == "True" ? iconSuccess : iconError)
+});
+
+</script> {% endblock %}

@@ -1,0 +1,19 @@
+{
+    "version" : "0.0.1",
+    "secrect_key" : "32jpdgsljfasgkkirqewhj23oy8fa7awui",
+    "mongodb" : {
+        "release" : {
+            "host": "localhost",
+            "user" : "vohungvi",
+            "password": "thigiacmaytinh.com",
+            "db_name" : "tgmtdjango"
+        },
+        "debug" : {
+            "host": "localhost",
+            "user" : "vohungvi",
+            "password": "thigiacmaytinh.com",
+            "db_name" : "tgmtdjango"            
+        }
+    },    
+    "face_min_size" : 80
+}

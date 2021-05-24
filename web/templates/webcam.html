@@ -1,0 +1,63 @@
+{% extends 'base.html' %} {% block head %}
+<title>Xem webcam</title>
+{% endblock %} {% block body %}
+
+
+<h2 id="lbl_status" style="color: green;">Webcam stream from backend</h2>
+<div class="col-md-6">
+    <h4 id="backend_time"></h4>
+    <h4 id="num_face"></h4>
+</div>
+<div class="col-md-6">
+    <button id ="btn_stopWebcam" class="btn btn-primary btn-default pull-right"> Stop webcam</button> </br>
+</div>
+
+
+
+
+<img src="{% url 'video_feed' %}" alt=""/>
+
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+
+$(document).ready(function () 
+{   
+    if(typeof(EventSource) !== "undefined") 
+    {
+        var source = new EventSource("/stream/");
+        source.onmessage = function(event) {
+            var obj = JSON.parse(event.data);
+            
+            document.getElementById("backend_time").innerText = obj["backend_time"]
+            document.getElementById("num_face").innerText ="Num face: " +  obj["num_face"]          
+        };
+    }
+    else 
+    {
+        document.getElementById("result").innerHTML = "Sorry, your browser does not support server-sent events...";
+    }
+
+    $("#btn_stopWebcam").click(function () {
+        request_data = {
+                            "token": Cookies.get("token")
+                        }                
+        host_request = gethost() + '/api/webcam/stop'
+        ajaxRequest("POST", host_request ,request_data, onStopSuccess, genericFailCB)
+    })
+
+    function onStopSuccess(res)
+    {
+        document.getElementById("lbl_status").innerText = "Webcam stopped"
+    }
+
+
+
+});
+
+</script>
+{% load static %}
+<!-- <script src="{% static "js/opencv.js" %}"></script> -->
+{% endblock %}

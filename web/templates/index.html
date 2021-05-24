@@ -1,0 +1,196 @@
+{% extends 'acme.html' %}
+{% block head %}
+<title>Hướng dẫn sử dụng</title>
+{% endblock %} 
+{% block body %}
+<br/>
+
+<div class="container">
+  <div class="row mar-b-50">
+    <div class="col-md-12">
+      <div class="text-center feature-head wow fadeInDown">
+        <h1>Ứng dụng điểm danh bằng khuôn mặt trực tiếp trên web</h1>
+      </div>
+
+      <div class="feature-box">
+        <div class="col-md-4 col-sm-4 text-center wow fadeInUp">
+          <div class="feature-box-heading">
+            <img src="/static/acme/img/face.png" alt="" width="100" height="100">
+            <h4><b>Nhận diện khuôn mặt online</b></h4>
+          </div>
+          <p class="text-center">CheckinWebcam là ứng dụng nền web ứng dụng công nghệ nhận diện khuôn mặt để điểm danh.</p>
+        </div>
+        <div class="col-md-4 col-sm-4 text-center wow fadeInUp">
+          <div class="feature-box-heading">
+            <img src="/static/acme/img/do-not-touch.png" alt="" width="100" height="100">
+            <h4><b>Không cần chạm</b></h4>
+          </div>
+          <p class="text-center">
+             Người dùng không cần chạm vào máy điểm danh để giảm thiểu khả năng lây lan COVID.
+          </p>
+        </div>
+
+        <div class="col-md-4 col-sm-4 text-center wow fadeInUp">
+          <div class="feature-box-heading">
+            <img src="/static/acme/img/2.png" alt="" width="100" height="100">
+            <h4><b>Dữ liệu truy cập được ở nhiều nơi</b></h4>
+          </div>
+          <p class="text-center">Ứng dụng online nên dễ dàng liên kết nhiều chi nhánh về cùng 1 cơ sở dữ liệu để quản lý.</p>
+        </div>            
+      </div>
+      <!--feature end-->
+    </div>
+  </div>
+</div>
+
+
+<!--property start-->
+<div class="property gray-bg">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6 col-sm-6 text-center wow fadeInLeft">
+        <img src="/static/acme/img/tab1.png" alt="">
+      </div>
+      <div class="col-lg-6 col-sm-6 wow fadeInRight">
+        <h1>Cách thức hoạt động</h1>
+        <p>
+          <i class="fa fa-check fa-lg pr-10"></i>
+          Checkin Webcam sẽ yêu cầu cấp quyền đọc webcam. Người dùng cần phải ấn <b>Allow</b> để sử dụng.
+        </p>
+        <p>
+          <i class="fa fa-check fa-lg pr-10"></i>
+          Khi có người xuất hiện và nhìn thẳng vào webcam thì Checkin Webcam sẽ nhận diện.
+        </p>
+        <p>
+          <i class="fa fa-check fa-lg pr-10"></i>
+          Dữ liệu được ghi nhận lại và hiển thi ngay bên dưới màn hình
+        </p>
+        <hr>
+        <h1>Thiết bị</h1>            
+        <p>
+          <i class="fa fa-check fa-lg pr-10"></i>
+          Có thể sử dụng máy tính sẵn có và 1 webcam là có thể sử dụng được. Máy tính cấu hình yếu như Raspberry Pi vẫn có thể sử dụng được.
+        </p>
+        <p>
+          <i class="fa fa-check fa-lg pr-10"></i>
+          Hoặc người dùng có thể sử dụng smartphone, Checkin Webcam sẽ mở camera của smartphone lên và tiến hành nhận dạng.
+        </p>
+        <p>
+          <i class="fa fa-check fa-lg pr-10"></i>
+          Người dùng có thể sử dụng camera IP có sẵn, cần download phiên bản chương trình dành cho Windows để kết nối camera IP: <a href="https://github.com/viscomsolution/FaceMon/releases/"> https://github.com/viscomsolution/FaceMon/releases/ </a>
+        </p>
+        <hr>
+        <a href="/register" class="btn btn-purchase">
+          Đăng ký sử dụng
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<!--property end-->
+
+
+<div class="container">
+  <div class="row">
+    <div class="text-center feature-head">
+      <h1>Tính năng và ưu điểm</h1>
+    </div>
+    <div class="services">
+      <div class="col-lg-6 col-sm-6">
+        <div class="icon-wrap ico-bg round-five wow zoomIn" data-wow-duration="1.5s" data-wow-delay=".1s">
+          <i class="fa fa-desktop"></i>
+        </div>
+        <div class="content">
+          <h3 class="title">Dùng để chấm công</h3>
+          <p>Checkin Webcam tính được thời gian lượt vào - ra, dựa vào đó có thể tính thời gian làm việc.</p>
+        </div>
+      </div>
+      <div class="col-lg-6 col-sm-6">
+        <div class="icon-wrap ico-bg round-five wow zoomIn" data-wow-duration="1.5s" data-wow-delay=".3s">
+          <i class="fa fa-gift"></i>
+        </div>
+        <div class="content">
+          <h3 class="title">Tốc độ nhanh</h3>
+          <p>Tốc độ nhận diện khuôn mặt khoảng 0,7 giây, tối đa 1 giây.</p>
+        </div>
+      </div>
+    </div>
+    <div class="services">
+      <div class="col-lg-6 col-sm-6">
+        <div class="icon-wrap ico-bg round-five wow zoomIn" data-wow-duration="1.5s" data-wow-delay=".5s">
+          <i class="fa fa-code"></i>
+        </div>
+        <div class="content">
+          <h3 class="title">Kiểm tra lại hình ảnh</h3>
+          <p>Admin có thể xem lại hình ảnh lượt ra vào để kiểm tra gian lận chấm công.</p>
+        </div>
+      </div>
+      <div class="col-lg-6 col-sm-6">
+        <div class="icon-wrap ico-bg round-five wow zoomIn" data-wow-duration="1.5s" data-wow-delay=".7s">
+          <i class="fa fa-book"></i>
+        </div>
+        <div class="content">
+          <h3 class="title">Thiết kế tối giản</h3>
+          <p>
+            Checkin Webcam thiết kế đơn giản, lưu trữ vừa đủ các thông tin cần thiết và dễ dàng thao tác.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="services">
+      <div class="col-lg-6 col-sm-6">
+        <div class="icon-wrap ico-bg round-five wow zoomIn" data-wow-duration="1.5s" data-wow-delay=".9s">
+          <i class="fa fa-bullhorn"></i>
+        </div>
+        <div class="content">
+          <h3 class="title">Dễ dàng xem báo cáo</h3>
+          <p>Admin của tổ chức dễ dàng xem báo cáo lượt vào của nhân viên ở bất cứ đâu có internet. Có thể xuất báo cáo của từng nhân viên để đánh giá chuyên cần</p>
+        </div>
+      </div>
+      <div class="col-lg-6 col-sm-6">
+        <div class="icon-wrap ico-bg round-five wow zoomIn" data-wow-duration="1.5s" data-wow-delay="1.1s">
+          <i class="fa fa-eye"></i>
+        </div>
+        <div class="content">
+          <h3 class="title">Không phải lo lắng về dữ liệu</h3>
+          <p>
+            Dữ liệu được lưu trữ trên cloud, an toàn, bảo mật. Dễ dàng liên kết nhiều chi nhánh về cùng 1 cơ sở dữ liệu để dễ quản lý
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12 recent">
+      <h3 class="recent-work">Các loại thiết bị phù hợp</h3>      
+      <div id="owl-demo" class="owl-carousel owl-theme">
+        <div class="item view">          
+          <a href="https://thigiacmaytinh.com/review-webcam-logitech-c922/" target="blank">
+            <img src="/static/acme/img/camera-hikvision.jpg" alt="work Image"/>
+            <h4>Camera IP</h4>
+          </a>
+        </div>        
+        <div class="item view">          
+          <a href="https://thigiacmaytinh.com/review-webcam-logitech-c922/" target="blank">
+            <img src="/static/acme/img/phone1.jpg" alt="work Image"/>
+            <h4>Smartphone Android</h4>
+          </a>
+        </div>
+        <div class="item view">          
+          <a href="https://thigiacmaytinh.com/review-webcam-logitech-c922/" target="blank">
+            <img src="/static/acme/img/c922.jpg" alt="work Image"/>
+            <h4>Logitech C922</h4>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

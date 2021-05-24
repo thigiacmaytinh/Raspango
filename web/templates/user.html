@@ -1,0 +1,453 @@
+{% extends 'base.html' %}
+{% block head %}
+<title>Quản lý admin</title>
+{% endblock %}
+{% block body %}
+<br/>
+
+<!-- query panel -->
+<div class=" panel panel-primary">
+    <div class="panel-heading">
+        Quản lý admin
+    </div>
+        <div class="container-fuid panel-body form-inline">
+            <div class="row" style="padding-left:10px">
+                <div class="input-group col-md-2" >                              
+                    <select class="form-control" id="cb_status"></select>
+                </div>
+                <div class="input-group col-md-3">
+                    <input type="text" placeholder="Tìm theo email" name="text" id='txt_search' class="form-control "> 
+                </div>                
+                <div class="input-group col-md-1">
+                    <button id ="btn_search" class="btn btn-primary btn-default"><span class="glyphicon glyphicon-search"></span> Tìm kiếm</button>
+                </div>
+        </div>
+    </div>
+</div>
+<!-- query panel end -->
+
+
+
+<div class="panel panel-default" id="search_result" hidden>
+        <div class="panel-heading">
+            <span id="lbl_header_table">Danh sách tài khoản admin</span>            
+        </div>
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-hover" id="result_table">
+                    <thead>
+                        <tr> 
+                            <th>STT</th>
+                            <th>Email</th>
+                            <th>Họ tên</th>
+                            <th>Trạng thái</th>
+                            <th>Chấm công</th>
+                            <th>Gói dịch vụ</th>
+                            <th>Tổ chức</th>
+                            <th>Số cổng</th>
+                            <th>Số khuôn mặt</th>
+                            <th>Ngày đăng ký</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.table-responsive -->
+        </div>
+        <!-- /.panel-body -->
+    </div>
+
+<!-- query result end -->
+
+<!-- modals -->
+
+<!-- edit modal-->
+<div class="modal fade" id="modal_user" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content panel-yellow">
+            <div class="modal-header panel-heading">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" id="lbl_modal_title">Cập nhật tài khoản</h4>
+            </div>
+            <div class="modal-body panel-body">
+                <div class="row">
+        
+                    <div class="col-md-12">
+                        <form role="form" id="frm_edit">
+                                
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <label>Email</label>                                           
+                                </div>
+                                <div class="input-group" class="col-md-6 pull-right">
+                                    <span class="input-group-addon"><i class="fa fa-envelope"></i> </span>
+                                    <input type="text" class="form-control" id="txt_email">
+                                </div>                                   
+                            </div>
+                            
+                            <div class="form-group" hidden>
+                                <div class="col-md-3">                                                                           
+                                    <label>Họ tên</label>
+                                </div>                                                             
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                    <input type="text" class="form-control" id="txt_fullname"> 
+                                </div>
+                            </div>
+                            <div id="div_address" class="form-group" hidden>  
+                                <div class="col-md-3">
+                                    <label for="txt_address">Địa chỉ:</label>
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-key"></i></span>
+                                    <input type="text" class="form-control" id="txt_address" placeholder="Địa chỉ" disabled> 
+                                </div>                                   
+                            </div>
+
+                            <div id="div_personalID" class="form-group" hidden>
+                                <div class="col-md-3">
+                                    <label for="txt_personalID">Số CMND</label>
+                                </div>                            
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                    <textarea class="form-control" id="txt_personalID" rows="3" disabled></textarea>
+                                </div>                                   
+                            </div>
+
+                            <div id= "div_intro"class="form-group" hidden>
+                                <div class="col-md-3">
+                                    <label for="txt_introOrg">Tên đơn vị:</label>                                          
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                    <input type="text" class="form-control" id="txt_introOrg" placeholder="Đơn vị công tác nếu có" disabled> 
+                                </div>                                   
+                            </div>
+
+                            <div id="div_tax" class="form-group" hidden>
+                                <div class="col-md-3">
+                                    <label for="txt_tax">Mã số thuế:</label>                                          
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                    <input type="text" class="form-control" id="txt_tax" placeholder="Mã số thuế" disabled> 
+                                </div>                                   
+                            </div>
+
+                            <div id="div_bank" class="form-group" hidden>
+                                <div class="col-md-3">
+                                    <label for="txt_bankAccount">Tài khoản</label>                                          
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                    <textarea class="form-control" id="txt_bankAccount" rows="3" disabled></textarea>
+                                </div>                                   
+                            </div>
+                            
+                            <div id="div_suspendReason" class="form-group">
+                                <div class="col-md-3">
+                                    <label>Lý do khóa account</label>
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                    <input type="text" class="form-control" id="txt_suspendReason"> 
+                                </div>                                   
+                            </div>
+
+                            <div id="" class="form-group">
+                                <div class="col-md-3">
+                                    <label for="txt_bankAccount">Mục đích</label>                                          
+                                </div>
+                                <div class="form-group input-group">                            
+                                    <input type="checkbox" id="chk_stats" checked disabled> Thống kê ra vào &nbsp;&nbsp;
+                                    <input type="checkbox" id="chk_timekeeper"> Chấm công &nbsp;&nbsp;
+                                </div>
+                            </div>
+
+                            <div id="" class="form-group">
+                                <div class="col-md-3">
+                                    <label for="">Gói</label>                                          
+                                </div>
+                                <div class="form-group input-group">                            
+                                    <input type="radio" name="servicePack" id="rd_free" value="Free"checked> Free &nbsp;&nbsp;
+                                    <input type="radio" name="servicePack" id="rd_basic" value="Basic"> Basic &nbsp;&nbsp;
+                                    <input type="radio" name="servicePack" id="rd_premium" value="Premium"> Premium &nbsp;&nbsp;
+                                    <input type="radio" name="servicePack" id="rd_subscription" value="Subscription"> Subscription <br>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <button id ="btn_delete" class="btn btn-default btn-danger"><span class="fa fa-trash-alt"></span> Khóa tài khoản</button>    
+                        <div class="pull-right">                            
+                            <button id ="btn_approve" class="btn btn-default btn-warning"><span class="glyphicon glyphicon-refresh"></span> Approve</button>
+                            <button id ="btn_update" class="btn btn-default btn-success"><span class="fa fa-save"></span> Cập nhật</button>
+                        </div>
+                    </div>
+                </div>            
+            </div> <!-- end modal body-->        
+        </div>
+    </div>
+</div> 
+
+<!-- edit modal end-->
+
+<!-- modals end -->
+
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+
+$(document).ready(function() {
+    g_servicePack = ""
+    g_purpose = ""
+    g_userLevel = ""
+    VerifyToken(function(res){
+        g_userLevel = res.level
+        if(g_userLevel == "Root")
+        {
+            //FillLevel();
+            $("#div_level").show()
+        }
+    }, genericFailCB)
+    
+    var users = null 
+    var orgList = null
+    var groupList = null  
+
+    $("div#div_role :input").attr("disabled", true);
+    // $("div#div_intro :input").attr("disabled", true);
+    // $("div#div_tax :input").attr("disabled", true);
+    // $("div#div_bank :input").attr("disabled", true);
+
+    FillStatus()
+    GetUserList()
+
+    function FillStatus()
+    {        
+        $('#cb_status').append($("<option></option>").attr("value", "all").text("Tất cả"));
+        $('#cb_status').append($("<option></option>").attr("value", "Registered").text("Registered"));
+        $('#cb_status').append($("<option></option>").attr("value", "Verified").text("Verified"));
+        $('#cb_status').append($("<option></option>").attr("value", "Approved").text("Approved"));
+        $('#cb_status').append($("<option></option>").attr("value", "Suspend").text("Suspend"));
+        $('#cb_status').append($("<option></option>").attr("value", "Invited").text("Invited"));
+    }
+   
+    $("#btn_search").click(function(){
+        GetUserList()
+    });
+
+    function GetUserList()
+    {
+        $('#result_table > tbody tr').remove()
+        request_data = {
+            "level" : "Admin",
+            "group_id" : $('#cb_groupAndOrg').find(":selected").val(),
+            "search_string" : $("#txt_search").val(),
+            "status": $('#cb_status').find(":selected").val(),
+            "token" : Cookies.get("token")
+        }
+        host_request = gethost() + '/api/user/getList'
+        ajaxRequest("POST", host_request, request_data, onSearchSuccess, genericFailCB)  
+    }
+
+    function onSearchSuccess(res)
+    {        
+        var index=1
+        users = res
+        for(i = 0; i < users.length; i++)
+        {
+            $('#result_table > tbody:last-child').append(genRow(users[i], index++))
+        }
+        $("#search_result").show()
+    }
+
+    function genRow(user,order)
+    {  
+        row =   '<tr class="trow" id="' + user.id  + '">' +   
+            "<td>" + order + "</td>"  + 
+            "<td>" + user.email + "</td>"  +
+            "<td>" + user.fullname + "</td>" +
+            "<td>" + user.status + "</td>" +
+            "<td>" + (user.timekeeper ? "Có" : "Không") + "</td>" +
+            "<td>" + user.servicePack + "</td>" +
+            "<td>" + user.orgName + "</td>" +
+            "<td>" + user.numGateAccount + "</td>" +
+            "<td>" + user.numPerson + "</td>" +
+            "<td>" + datetimeConverter(user.timeUpdate) + "</td>"  +
+            "</tr>"
+        return row
+    }
+    
+    function getUserById(id)
+    {
+        if(users != null)
+        {
+            for(i =0; i< users.length; i++)
+            {
+                if(users[i].id == id)
+                {
+                    return users[i]
+                }                    
+            }
+        }
+        return null
+    }
+
+    $("#result_table").on( "click", "tbody tr",function( event ) {
+        //handle row click
+        user = getUserById(this.id)
+       
+        $("#txt_email").val($(this).closest("tbody tr").find('td:eq(1)').text())
+        $("#txt_fullname").val($(this).closest("tbody tr").find('td:eq(2)').text())
+        
+        document.getElementById("chk_timekeeper").checked = $(this).closest("tbody tr").find('td:eq(4)').text() == "Có"
+        
+        g_servicePack = $(this).closest("tbody tr").find('td:eq(5)').text()
+        $("input[name=servicePack][value=" + g_servicePack + "]").prop('checked', true);
+
+        $("#btn_delete").show()
+        $("#btn_update").show()
+        $("#btn_approve").show()
+   
+        if( user == null)
+        {
+            showError("Không lấy được thông tin member, vui lòng tìm kiếm lại!")
+            return
+        }
+
+
+        $("#cb_group_popup").val("")
+        $("#cb_org_popup").val("")
+        
+
+
+        OnLevelSelected()        
+        
+        $("#txt_phone").val(user.phone)
+        $("#txt_introOrg").val(user.introOrg)
+        $("#txt_address").val(user.address)
+        $("#txt_personalID").val(user.personalID + "\n" + dateConverter(user.personalIDdate) + "\n" + user.personalIDplace)
+        $("#txt_represent").val(user.represent)
+        $("#txt_position").val(user.position)
+        $("#txt_tax").val(user.tax)
+        $("#txt_bankAccount").val(user.bankNumber + "\n" + user.bankAccountName + "\n" + user.bankBranch)
+
+        //Show modal
+        $("#modal_user").modal()        
+    });
+
+    
+    $("#btn_showModal").click(function() {
+        $("#btn_delete").hide()
+        $("#btn_update").hide()
+        $("#btn_approve").hide()
+
+        document.getElementById("frm_edit").reset();
+
+        if(g_userLevel == "Admin")
+        {
+            document.getElementById("lbl_modal_title").innerText = "Tạo tài khoản cổng"    
+        }
+        
+        $("#modal_user").modal()     
+    })
+
+    $("#btn_update").click(function() {       
+        request_data = {
+                        "email": $("#txt_email").val(),                            
+                        "group_id": $('#cb_group_popup').find(":selected").val(),
+                        "orgName": $('#cb_org_popup').find(":selected").val(),
+                        "status" : "Approved",
+                        "timekeeper" : (document.getElementById("chk_timekeeper").checked ? "True" : "False"),
+                        "servicePack" : g_servicePack,
+                        "token": Cookies.get("token")      
+                        }
+                       
+        host_request = gethost() + '/api/user/update'
+        ajaxRequest("POST", host_request ,request_data, onEditSuccess, genericFailCB)
+    });
+
+    function onEditSuccess(res)
+    {
+        document.getElementById("frm_edit").reset();
+        $("#modal_user").modal('hide')
+        $('#result_table > tbody tr').remove()
+        ShowToast(res["Success"])
+        GetUserList()
+    }
+
+    $("#btn_approve").click(function(){
+        //reset password api
+        request_data = {
+                            "status" : "Approved",
+                            "email": $("#txt_email").val(),
+                            "token": Cookies.get("token")
+                       }
+        host_request = gethost() + "/api/user/update"
+        ajaxRequest("POST", host_request, request_data, updateSuccessAndClose, genericFailCB);   
+    })     
+
+    $("#btn_delete").click(function(){
+        //remove user
+        request_data = {
+                            "email": $("#txt_email").val(),
+                            "suspendReason": $("#txt_suspendReason").val(),
+                            "token": Cookies.get("token")
+                       }
+        host_request = gethost() + "/api/user/removeUser"
+        ajaxRequest("POST", host_request, request_data, updateSuccessAndClose, genericFailCB);   
+    })    
+
+    function updateSuccessAndClose(res)
+    {        
+        $("#modal_user").modal('hide')
+        $('#result_table > tbody tr').remove()
+        ShowToast(res["Success"])
+        GetUserList()
+    }
+
+
+    $('#cb_level_popup').on('change', function() {        
+        OnLevelSelected()
+    });
+
+    function OnLevelSelected()
+    {
+        var level = $("#cb_level_popup").find(":selected").val()
+        if(level == "Partner")
+        {
+            $("div#div_group :input").attr("disabled", true);
+        }
+        else if(level == "Staff" || level == "Mod")
+        {
+            $("div#div_group :input").attr("disabled", false);
+        }
+        else
+        {
+            $("div#div_group :input").attr("disabled", true);
+        }
+    }
+
+    
+
+    $("input[name='purpose']").change(function(e){
+        g_purpose = $(this).val()
+    });
+
+    $("input[name='servicePack']").change(function(e){
+        g_servicePack = $(this).val()
+    });
+
+});
+
+</script>
+
+{% endblock %}

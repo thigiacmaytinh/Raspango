@@ -1,0 +1,73 @@
+{% extends 'base.html' %} {% block head %}
+<title>Xem webcam</title>
+{% endblock %} {% block body %}
+
+
+<h2 id="lbl_status" style="color: green;">Upload image to detect face</h2>
+
+<div class="col-md-12">
+    <input id="inp" type='file'>
+    <button id ="btn_upload" class="btn btn-primary btn-default"> Upload</button>
+</br>
+</div>
+</br>
+
+<div class="col-md-6">
+    
+    <img id="img" height="300">
+</div>
+
+
+<div class="col-md-6">
+    <img id="img_result" height="300">
+</div>
+
+
+
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+
+$(document).ready(function () 
+{   
+    g_base64_string = ""
+    document.getElementById("inp").addEventListener("change", readFile);
+
+    function readFile()
+    {
+        if (this.files && this.files[0]) 
+        {    
+            var FR= new FileReader();
+            
+            FR.addEventListener("load", function(e) 
+            {
+                g_base64_string = e.target.result
+                document.getElementById("img").src = g_base64_string
+            }); 
+            
+            FR.readAsDataURL( this.files[0] );
+        }
+    }
+    
+    $("#btn_upload").click(function () {
+        request_data = {
+                            "token": Cookies.get("token"),
+                            "imageBase64" : g_base64_string,
+                            "isBase64" : "True"
+                        }                
+        host_request = gethost() + '/api/opencv/detectface'
+        ajaxRequest("POST", host_request, request_data, onDetectSuccess, genericFailCB)
+    })
+
+    function onDetectSuccess(res)
+    {
+        document.getElementById("img_result").src = "data:image/png;base64," + res.image_base64
+    }
+});
+
+</script>
+{% load static %}
+<!-- <script src="{% static "js/opencv.js" %}"></script> -->
+{% endblock %}

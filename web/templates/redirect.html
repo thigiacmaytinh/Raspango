@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block head %}
+<title>Redirect</title>
+{% endblock %}
+{% block body %}
+
+
+
+
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+
+$(document).ready(function() {
+
+    var g_token = findGETParameter("token")
+    if(g_token != null)
+    {
+        request_data = {
+                            "token": g_token,
+                        }
+        host_request = gethost() + '/api/loginsession/redirect'
+        ajaxRequest("POST", host_request ,request_data, onSuccess, onFailed)
+    }
+    else
+    {
+        window.location.href ='/login/'
+    }
+
+    function onSuccess(res)
+    {
+        showNotice(res["Success"])
+        var count = 3;
+        var countdown = setInterval(function(){
+            if (count == 0)
+            {
+                clearInterval(countdown);
+                window.location.href = res.redirectlink
+            }
+            count--;
+        }, 1000);
+    }
+
+    function onFailed(res)
+    {
+        window.location.href ='/login/'
+    }
+});
+
+</script>
+
+{% endblock %}
