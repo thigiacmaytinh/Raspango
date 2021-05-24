@@ -13,3 +13,4 @@ Pillow==8.2.0
 numpy==1.17.2
 Click==7.0
 opencv-python==4.4.0.44
+tensorflow==2.3.1

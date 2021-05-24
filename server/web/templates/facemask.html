@@ -258,10 +258,6 @@ function onDetectFailed(res)
 {
     document.getElementById("loading_icon").style.display = "none"
     ShowToast(res["responseJSON"]["Error"])
-
-    setTimeout(function (){
-        location.reload();
-    }, 1000);
 }
 
 </script>
