@@ -87,6 +87,8 @@ def CheckToken(request, redirect_page, permissions, args = {}):
         loginSession = GetLoginSession(request)
         if loginSession != None:
             args['level'] = loginSession["level"]
+            args['email'] = loginSession["email"]
+            print(args['email'])
 
             for p in permissions:
                 if(p == loginSession["level"]):
