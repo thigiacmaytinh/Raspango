@@ -1,11 +1,11 @@
 from threading import Thread, Lock
 import cv2
-from django.conf import settings as djangoSettings
+from django.conf import settings as raspango
 import threading
 import time, datetime
-from django.conf import settings as djangoSettings
+from django.conf import settings as raspango
 
-if(djangoSettings.IS_RASPBERRY_PI):
+if(raspango.IS_RASPBERRY_PI):
     import RPi.GPIO as GPIO
 
 class TGMTgpio(threading.Thread):
@@ -18,7 +18,7 @@ class TGMTgpio(threading.Thread):
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(_gpio_pin, GPIO.OUT)
-        djangoSettings.GPIO_VALUE[self.gpio_pin] = True
+        raspango.GPIO_VALUE[self.gpio_pin] = True
 
     def run(self):
         startTime = time.time()
@@ -28,11 +28,11 @@ class TGMTgpio(threading.Thread):
             if(self.delay > 0):
                 time.sleep(self.delay)
                 GPIO.output(self.gpio_pin, not self.triggerValue)
-                djangoSettings.GPIO_VALUE[self.gpio_pin] = False
+                raspango.GPIO_VALUE[self.gpio_pin] = False
                 break
             else:                
                 time.sleep(0.1)
-                if(djangoSettings.GPIO_VALUE[self.gpio_pin] == False):
+                if(raspango.GPIO_VALUE[self.gpio_pin] == False):
                     GPIO.output(self.gpio_pin, not self.triggerValue)
                     break
 

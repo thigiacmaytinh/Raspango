@@ -8,7 +8,7 @@ from api.views.loginsession import *
 from lib.TGMT.TGMTwebcam import streamwebcam
 from lib.TGMT.TGMTutil import GetSystemInfo
 from lib.hardware.ultrasonic import InitSensor
-from django.conf import settings as djangoSettings
+from django.conf import settings as raspango
 
 def changepassword(request):
     permissions = ["all"]
@@ -32,7 +32,7 @@ def logout(request):
     except Exception as e:
         print(str(e))
 
-    res = redirect('login')
+    res = redirect('/login')
     res.delete_cookie('token')
     res.delete_cookie('email')
     return res
@@ -75,7 +75,7 @@ def upload(request):
 def Redirect(request):
     args = {
         'authorized': False,
-        'version' : djangoSettings.VERSION,
+        'version' : raspango.VERSION,
         }
     return render(request, 'redirect.html' , args)
     
@@ -83,9 +83,9 @@ def CheckToken(request, redirect_page, permissions, args = {}):
     isValidToken = False
     user = None
 
-    args['debug'] = djangoSettings.DEBUG
+    args['debug'] = raspango.DEBUG
     args['authorized'] = False
-    args['version'] = djangoSettings.VERSION,
+    args['version'] = raspango.VERSION,
 
 
     if("all" in permissions):
@@ -122,7 +122,7 @@ def IsValidToken(request):
         if(_token == None or _token == ""):
             return False
 
-        decode(_token)
+        api.auth.decode(_token)
         return True
     except Exception as e:
         print(str(e))
@@ -156,7 +156,7 @@ def stream(request):
             time.sleep(0.1)
             result = {
                 'backend_time' : (datetime.datetime.utcnow() + datetime.timedelta(hours = 7)).strftime("%Y-%m-%d %H:%M:%S"),
-                'num_face' : djangoSettings.NUM_FACE,
+                'num_face' : raspango.NUM_FACE,
             }
             yield 'data: ' + json.dumps(result) + '\n\n'
     return StreamingHttpResponse(event_stream(), content_type='text/event-stream')

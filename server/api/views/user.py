@@ -15,7 +15,7 @@ from django.db.models import Q
 from lib.TGMT.TGMTemail import SendEmailInternal
 from api.views.loginsession import *
 from django.core import serializers
-from django.conf import settings as djangoSettings
+from django.conf import settings as raspango
 
 ####################################################################################################
 
@@ -28,7 +28,7 @@ def login(request):
 
     try:
         _user = User.objects.get(email=_email, isDeleted=False)
-        if(not djangoSettings.DEBUG and _user.password != hashed_password):
+        if(not raspango.DEBUG and _user.password != hashed_password):
             return ErrorResponse("Không đúng email/password")
     except User.DoesNotExist:
         return ErrorResponse("Không đúng email/password")

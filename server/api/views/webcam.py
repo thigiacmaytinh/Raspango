@@ -14,7 +14,7 @@ from django.db.models import Q
 from api.views.loginsession import *
 from lib.TGMT.TGMTemail import SendEmailInternal
 from lib.TGMT.TGMTsound import PlaySound
-from django.conf import settings as djangoSettings
+from django.conf import settings as raspango
 import cv2
 import threading
 
@@ -27,7 +27,7 @@ def StopWebcam(request):
 
         
 
-        djangoSettings.PLAY_WEBCAM = False
+        raspango.PLAY_WEBCAM = False
 
         return SuccessResponse("Stop thành công")
     except Exception as e:

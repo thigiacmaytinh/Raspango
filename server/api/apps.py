@@ -1,7 +1,7 @@
 from django.apps import AppConfig
 from rest_framework.response import Response
 import json
-from django.conf import settings as djangoSettings
+from django.conf import settings as raspango
 from django.core import serializers
 import datetime
 

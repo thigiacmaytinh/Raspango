@@ -14,7 +14,7 @@ from api.apps import *
 from django.db.models import Q
 from api.views.loginsession import *
 from lib.TGMT.TGMTutil import *
-from django.conf import settings as djangoSettings
+from django.conf import settings as raspango
 from lib.tensorflow.FaceMaskDetector import faceMask
 
 ####################################################################################################
@@ -24,7 +24,7 @@ def DetectFacemask(request):
     try:
         dirName = "facemask"
         _randFilename = datetime.datetime.utcnow().strftime("%Y-%m-%d_%H-%M-%S") + "_" + GenerateRandomString() + ".jpg"
-        uploaded_file_abs = os.path.join(djangoSettings.MEDIA_ROOT, dirName, _randFilename)
+        uploaded_file_abs = os.path.join(raspango.MEDIA_ROOT, dirName, _randFilename)
         hasNewImage = SaveImageFromRequest(request, dirName, _randFilename)
 
         if(not hasNewImage):
