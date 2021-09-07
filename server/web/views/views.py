@@ -97,10 +97,8 @@ def CheckToken(request, redirect_page, permissions, args = {}):
             args['level'] = loginSession["level"]
             args['email'] = loginSession["email"]
 
-            for p in permissions:
-                if(p == loginSession["level"]):
-                    isValidToken = True
-                    break
+            isValidToken = loginSession["level"] in permissions
+
         
     
     if(isValidToken):
