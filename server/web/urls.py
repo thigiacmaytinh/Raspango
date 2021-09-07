@@ -21,7 +21,7 @@ urlpatterns = [
     url(r'^camera/$', views.camera),
     url(r'^webcam/$', views.webcam),
     url(r'^facemask/$', views.facemask),
-    url(r'^video_feed/$', views.video_feed),
+    url(r'^video_feed/$', views.video_feed, name='video_feed'),
     url(r'^stream/$', views.stream),
     url(r'^upload/$', views.upload),
 ]
