@@ -15,7 +15,7 @@ from django.db.models import Q
 from api.views.loginsession import *
 from lib.TGMT.TGMTutil import *
 from django.conf import settings as raspango
-from lib.tensorflow.FaceMaskDetector import faceMask
+from module.FaceMask.FaceMaskDetector import faceMask
 
 ####################################################################################################
 

@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import CharField, DateTimeField, BooleanField
 
 ################################################################
 #No.1
@@ -18,29 +19,29 @@ USER_STATUS = (
 )
 
 class User(models.Model):    
-    email               =  models.CharField(max_length=200)
-    fullname            =  models.CharField(max_length=200)
-    position            =  models.CharField(max_length=200)
-    password            =  models.CharField(max_length=200)
-    phone               =  models.CharField(max_length=200)
-    level               =  models.CharField(max_length=200) #, choices=LEVELS
-    status              =  models.CharField(max_length=200) #, choices=USER_STATUS
-    timeUpdate          =  models.DateTimeField()  
-    suspendReason       =  models.CharField(max_length=200)
-    isDeleted           =  models.BooleanField(default = False)
+    email               =  CharField(max_length=200)
+    fullname            =  CharField(max_length=200)
+    position            =  CharField(max_length=200)
+    password            =  CharField(max_length=200)
+    phone               =  CharField(max_length=200)
+    level               =  CharField(max_length=200) #, choices=LEVELS
+    status              =  CharField(max_length=200) #, choices=USER_STATUS
+    timeUpdate          =  DateTimeField()  
+    suspendReason       =  CharField(max_length=200)
+    isDeleted           =  BooleanField(default = False)
     
 
 ################################################################
 #No.2
 class Level(models.Model):
-    levelID             =  models.CharField(max_length=200)
-    levelName           =  models.CharField(max_length=200)
+    levelID             =  CharField(max_length=200)
+    levelName           =  CharField(max_length=200)
 
 ################################################################
 #No.3
 class Option(models.Model):
-    optionName          =  models.CharField(max_length=200)
-    value               =  models.CharField(max_length=200)
+    optionName          =  CharField(max_length=200)
+    value               =  CharField(max_length=200)
   
 ################################################################
 GENDERS = (

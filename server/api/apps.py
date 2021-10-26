@@ -62,4 +62,50 @@ class JsonObjResponse(Response):
 ####################################################################################################
 
 def GetVNTime():
-    return datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc).astimezone(tz=None)
+    return utcnow().replace(tzinfo=datetime.timezone.utc).astimezone(tz=None)
+
+####################################################################################################
+
+def utcnow():
+    return datetime.datetime.utcnow()
+
+####################################################################################################
+
+def RequireParamExist(request, param, paramName):
+    value = GetParam(request, param)
+    if(value == None or value == ""):
+        raise Exception("Thiếu tham số " + paramName)
+    return True
+
+####################################################################################################
+
+def IsParamExist(request, param):
+    value = GetParam(request, param)
+    if(value == None or value == ""):
+        return False
+    return True
+
+####################################################################################################
+
+def RequireLevel(loginSession, levels):
+    if(loginSession["level"] not in levels):
+        raise Exception("Bạn phải đăng nhập để có thể thao tác")
+    return True
+
+####################################################################################################
+
+def GetParam(request, param, defaultValue=""):
+    params = request.POST
+    if(len(params) == 0):
+        params = request.data    
+    if(param not in params):
+        return defaultValue
+    if(params[param] == None):
+        return defaultValue
+    return params[param]
+
+####################################################################################################
+
+def printt(msg):
+    if(raspango.DEBUG):
+        print(">>>>" + str(msg))

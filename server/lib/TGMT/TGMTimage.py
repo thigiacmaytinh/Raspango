@@ -3,6 +3,7 @@ from api.util import *
 from django.conf import settings as raspango
 from django.core.files.storage import FileSystemStorage
 import base64
+from api.apps import *
 
 ####################################################################################################
 
@@ -47,10 +48,10 @@ def RotateImageWithExif(imgPath):
 ####################################################################################################
 #return true if has new image
 def SaveImageFromRequest(request, saveDir, fileName):
-    _isBase64 = request.POST.get("isBase64")
+    _isBase64 = GetParam(request, "isBase64")
     
     if(_isBase64 != None and _isBase64 == "True"):
-        _imageBase64 = request.POST.get("imageBase64")
+        _imageBase64 = GetParam(request, "imageBase64")
         if(_imageBase64 != None and _imageBase64 != ""):                
             SaveBase64ToImg(saveDir, fileName, _imageBase64)
             return True

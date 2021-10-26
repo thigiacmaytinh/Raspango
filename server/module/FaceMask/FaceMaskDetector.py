@@ -158,7 +158,7 @@ class FaceMask:
                 elapsed = time.time() - startTime
 
                 if(saveImage):
-                    cv2.imwrite(result +"\\" + datetime.datetime.utcnow().strftime("%Y-%m-%d_%H-%M-%S") + "_" + GenerateRandomString() + ".jpg", matFace)
+                    cv2.imwrite(result +"\\" + utcnow().strftime("%Y-%m-%d_%H-%M-%S") + "_" + GenerateRandomString() + ".jpg", matFace)
 
                 arr.append(result)
 
