@@ -9,4 +9,5 @@ from .views import index, login, logout, user,\
     register,  \
     video_feed, \
     stream, \
+    brightness, \
     upload

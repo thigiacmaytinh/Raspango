@@ -24,5 +24,6 @@ urlpatterns = [
     url(r'^video_feed/$', views.video_feed, name='video_feed'),
     url(r'^stream/$', views.stream),
     url(r'^upload/$', views.upload),
+    url(r'^brightness/$', views.brightness),
 ]
 handler404 = views.notfound

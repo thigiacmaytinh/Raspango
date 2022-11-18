@@ -68,6 +68,10 @@ def facemask(request):
     permissions = ["Root", "Admin", "Gate", "Supporter"]
     return CheckToken(request, 'facemask.html', permissions)
 
+def brightness(request):
+    permissions = ["Root", "Admin", "Gate", "Supporter"]
+    return CheckToken(request, 'brightness.html', permissions)
+
 def upload(request):
     permissions = ["Root", "Admin"]
     return CheckToken(request, 'upload.html', permissions)

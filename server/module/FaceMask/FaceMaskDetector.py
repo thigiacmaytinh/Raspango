@@ -9,6 +9,9 @@ from PIL import Image, ImageOps
 import random
 import string
 
+from api.util import *
+from api.apps import *
+
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 print(CURRENT_DIR)
 
@@ -49,7 +52,7 @@ class FaceMask:
     ####################################################################################################
 
     def TFpredictImgPath(self, imgePath):
-        pilImg = image.load_img(imgePath)    
+        pilImg = keras.preprocessing.image.load_img(imgePath)    
 
         return self.TFpredictPilImg(pilImg)
 

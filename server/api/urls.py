@@ -14,4 +14,5 @@ urlpatterns = [
     url(r'^webcam/stop$', views.StopWebcam),
     url(r'^opencv/detectface$', views.DetectFace),
     url(r'^facemask/detect$', views.DetectFacemask),
+    url(r'^brightness$', views.CheckBrightness),
 ]

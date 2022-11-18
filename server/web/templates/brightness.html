@@ -1,0 +1,297 @@
+
+{% extends 'base.html' %}
+{% block head %}
+<title>Kiểm tra sáng tối</title>
+<meta property="og:image" content="https://viscomsolution.com/wp-content/uploads/2020/07/facemon2.jpg" />
+<meta charset="UTF-8">
+<meta name="description" content="Nhận diện khuôn mặt online, so sánh tỷ lệ giống của 2 khuôn mặt">
+<meta name="keywords" content="faceid, face recognize, face recognition">
+<meta name="author" content="viscomsolution">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% endblock %}
+
+{% block body %}
+
+
+<div class="row">
+    <center> 
+        <div class="col-md-12" >
+            <button id ="btn_compare" class="btn btn-primary btn-success" style="font-size: 2em;">
+                <i class="fas fa-paint-brush"></i> Check</button>
+        </div>
+    </center>    
+</div>
+
+<div class="row">
+    <center> 
+        <div class="col-md-12" style="margin-top: 10px; margin-bottom: 10px;" >
+            <h3 id="lbl_status" style="color: green;">Ready</h3>
+            <div id="loading_icon"  class="spinner-border text-success"  role="status" style="width: 50px; height: 50px; display: none;"></div>
+        </div>        
+    </center>   
+</div>
+
+<div class="row">    
+    <div class="col-md-12" style="height: auto;">
+        <div class=" panel panel-primary">
+            <div class="panel-heading">
+                <span id="lbl_total">Ảnh khuôn mặt</span>
+            </div>
+            <div class="container-fuid panel-body form-inline">
+                <div class="row">
+                    <center>        
+                        <div class="col-md-12">        
+                            <button id ="btn_startWebcam1" class="btn btn-primary btn-default">
+                                <span class="fa fa-camera"></span> Mở webcam</button>
+                            <button id ="btn_takePicture1" class="btn btn-primary btn-default"  style="display: none;">
+                                <span class="fa fa-camera"></span> Chụp ảnh</button>
+                            <button id ="btn_selectImage1" class="btn btn-primary btn-default">
+                                <span class="fa fa-upload"></span> Chọn ảnh</button>
+                        </div>
+                    
+                        <div class="col-md-12">
+                            <input id="txt_url1" type="text" class="form-control" >
+                        </div>
+                        
+                        <div class="col-md-12">
+                            <canvas id="canvasWebcam1" style="max-width: 100%; display: none;" ></canvas>
+                            <video id="video1" style="max-width: 100%; display: none;">Your browser does not support the video tag.</video>
+                        </div>
+                        <input id="uploadImage1" type="file" class="inputFile" style="display: none;"/> 
+                        <img id="img_item1" style="max-width: 100%" crossorigin="anonymous">
+                    </center>  
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+ 
+
+
+
+
+
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+var g_status = "Ready"
+
+g_videoWidth = 640
+g_videoHeight = 480
+
+let stream = null;
+var begin = Date.now() - 5000;
+
+
+g_base64_string1 = ""
+
+$(document).ready(function () 
+{   
+    g_startTime = new Date();
+    g_endTime = new Date();
+
+    aspect = window.screen.availWidth / window.screen.availHeight
+    if(aspect < 1)
+    {
+        g_videoWidth = 480
+        g_videoHeight = 640
+    }
+});
+
+function PrintSuccess(msg)
+{
+    document.getElementById("lbl_status").innerText = msg
+    document.getElementById("lbl_status").style.color = "green"
+}
+
+function PrintError(msg)
+{
+    document.getElementById("lbl_status").innerText = msg
+    document.getElementById("lbl_status").style.color = "red"
+}
+
+
+$("#btn_startWebcam1").click(function () {
+    document.getElementById("canvasWebcam1").style.display = "none"
+    document.getElementById("img_item1").style.display = "none"
+    document.getElementById("video1").style.display = "block"
+
+    video = document.querySelector("#video1");
+    if (navigator.mediaDevices.getUserMedia) 
+    {
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function (s) {
+                stream = s
+                video.srcObject = stream;
+                video.play();
+
+                document.getElementById("btn_startWebcam1").style.display = "none"
+                document.getElementById("btn_takePicture1").style.display = "inline"
+            })
+            .catch(function (e) {
+                console.log(e);
+            });
+    }
+})
+
+
+$("#btn_takePicture1").click(function () 
+{    
+    document.getElementById("canvasWebcam1").style.display = "block"
+    document.getElementById("btn_startWebcam1").style.display = "inline"
+    document.getElementById("btn_takePicture1").style.display = "none"
+    document.getElementById("video1").style.display = "none"
+
+    canvas = document.getElementById('canvasWebcam1');
+    var context = canvas.getContext('2d');
+    canvas.width = g_videoWidth;
+    canvas.height = g_videoHeight;
+    context.drawImage(video, 0, 0, g_videoWidth, g_videoHeight);	
+
+    
+    video = document.querySelector("#video1");
+    video.pause();
+    video.srcObject=null;
+    stream.getVideoTracks()[0].stop();
+
+    g_base64_string1 = canvas.toDataURL('image/jpeg', 0.9) + "=="
+
+    CheckCondition()
+})
+
+
+$('#txt_url1').on('input propertychange paste', function() {
+    img_item1 = document.getElementById("img_item1")
+    img_item1.onload = function()
+    {
+        g_base64_string1 = ConvertImageToBase64(img_item1, g_videoWidth)
+        CheckCondition()
+    }
+    img_item1.src = $('#txt_url1').val();
+});
+
+
+$("#btn_selectImage1").click(function () {
+    $("#uploadImage1").click()
+})
+
+
+$("#uploadImage1").on('change', function(e){
+    document.getElementById("video1").style.display = "none"
+
+    g_base64_string1 = ""
+    if (this.files && this.files[0]) 
+    {    
+        //load image to canvas
+        var URL = window.URL;
+        var url = URL.createObjectURL(e.target.files[0]);
+
+        img_item1 = document.getElementById("img_item1")
+        img_item1.onload = function()
+        {
+            g_base64_string1 = ResizeImage(img_item1, g_videoWidth)
+            CheckCondition()
+        }
+        img_item1.src = url;        
+
+        document.getElementById("canvasWebcam1").style.display = "none"
+        document.getElementById("img_item1").style.display = "block"
+    }
+})
+
+function CheckCondition()
+{
+    if(g_base64_string1 == "")
+    {
+        document.getElementById("btn_compare").disabled = true
+    }
+    else
+    {
+        document.getElementById("btn_compare").disabled = false
+        CheckBrightness()
+    }
+}
+
+function ResizeImage(img, maxWidth)
+{
+    newWidth = img.width
+    newHeight = img.height
+    
+    if(img.width > maxWidth)
+    {
+        newWidth = maxWidth
+        newHeight = ((img.height * maxWidth ) / img.width)
+    }
+
+    
+
+    // create an off-screen canvas
+    var canvas = document.createElement('canvas'),
+    ctx = canvas.getContext('2d');
+
+    // set its dimension to target size
+    canvas.width = newWidth;
+    canvas.height = newHeight;
+
+    // draw source image into the off-screen canvas:
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+    // encode image to data-uri with base64 version of compressed image
+    return canvas.toDataURL('image/jpeg', 0.9) + "==";
+}
+
+$("#btn_compare").click(function () {    
+    CheckBrightness()
+})
+
+function CheckBrightness()
+{
+    if(g_status != "Ready")
+        return
+
+    PrintSuccess("")
+    
+    document.getElementById("loading_icon").style.display = "block"
+
+    g_status = "Sending"
+    g_startTime = new Date()
+
+    g_base64_string1 = g_base64_string1.replace("data:image/jpeg;base64,", "")
+    g_base64_string1 = g_base64_string1.replace("data:image/png;base64,", "")
+
+    var myFormData = new FormData();
+    myFormData.append('imageBase64', g_base64_string1);
+    
+    host_request = gethost() + "/api/brightness"
+    ajaxUpload("POST", host_request, myFormData, OnUploadFileSuccess, OnUploadFileFailed);
+}
+
+function OnUploadFileSuccess(res)
+{
+    document.getElementById("loading_icon").style.display = "none"
+    g_endTime = new Date()
+    var totalElapsed = (g_endTime - g_startTime)
+
+    PrintSuccess(res.Success + " (" + totalElapsed + " ms)" )
+
+    g_status = "Ready"
+}
+
+function OnUploadFileFailed(res)
+{
+    document.getElementById("loading_icon").style.display = "none"
+
+    g_status = "Ready"
+    PrintSuccess("Mời lượt tiếp theo")
+
+    console.log(res["responseJSON"]["Error"])
+
+    ShowToast(res["responseJSON"]["Error"])
+}
+
+</script>
+{% endblock %}
