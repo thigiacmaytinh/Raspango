@@ -13,8 +13,8 @@ def CheckBrightness(request):
         _base64_image = request.POST.get("imageBase64")
         frame = Base64ToMat(_base64_image)   
         
-        img_bright = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-        result, mean = CheckBright(img_bright)
+
+        result, mean = CheckBright(frame)
 
 
         return SuccessResponse(result + " {0:.3g}".format(mean))
