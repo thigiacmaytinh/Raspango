@@ -8,15 +8,9 @@ THRESH1 = 170
 THRESH2 = 100
 
 def CheckBright(frame):
-    #img = dtectface(frame)
-    #cv2.imwrite('abc2.jpg',img)
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-    # Calculate Histogram of V channel
     hist = cv2.calcHist([hsv], [2], None, [256], [0, 256])
-    # plt.plot(hist,color='b')
-    # plt.show()
 
-    # Calculate percent of dark region and bright region
     sum = np.sum(hist)
     dark = 0
     bright = 0
