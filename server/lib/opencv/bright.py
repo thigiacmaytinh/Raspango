@@ -7,36 +7,10 @@ from api.apps import printt
 THRESH1 = 170
 THRESH2 = 100
 
-
-def dtectface(img):
-    cv2.imwrite('abc.jpg',img)
-    # Detect face
-        # Set up config:
-    mp_face_detection = mp.solutions.face_detection
-    face_detection = mp_face_detection.FaceDetection(model_selection=0, min_detection_confidence=0.5)
-    results = face_detection.process(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
-    if results.detections is not None:
-    # print(results.detections)
-        bound_box = results.detections[0].location_data.relative_bounding_box
-        # print(bound_box)
-        # Lay cac thong so bounding box
-        x = int(np.abs(bound_box.xmin) * img.shape[0])
-        y = int(np.abs(bound_box.ymin) * img.shape[1])
-        w = int(np.abs(bound_box.width) * img.shape[0])
-        h = int(np.abs(bound_box.height) * img.shape[1])
-        # Crop image
-        img = img[y:y + h, x:x + w, :]
-    else:
-        img = img
-
-    return img
-
-
-
 def CheckBright(frame):
-    img = dtectface(frame)
-    cv2.imwrite('abc2.jpg',img)
-    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    #img = dtectface(frame)
+    #cv2.imwrite('abc2.jpg',img)
+    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
     # Calculate Histogram of V channel
     hist = cv2.calcHist([hsv], [2], None, [256], [0, 256])
     # plt.plot(hist,color='b')
@@ -63,6 +37,4 @@ def CheckBright(frame):
     else:
         result = 'Ok'
         mean = dark_per
-    print(dark_per)
-    print(bright_per)
     return result, mean
