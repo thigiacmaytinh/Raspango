@@ -9,7 +9,7 @@
     <meta name="author" content="">
 
     <!-- Bootstrap Core CSS -->
-    {% load static %}
+    <!-- {% load static %} -->
     <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- MetisMenu CSS -->
@@ -18,12 +18,13 @@
     <!-- Custom CSS -->
     <link href="/static/dist/css/sb-admin-2.css" rel="stylesheet">
 
-    <!-- Morris Charts CSS -->
-    <link href="/static/vendor/morrisjs/morris.css" rel="stylesheet">
-
     <!-- Custom Fonts -->
     <link href="/static/fontawesome/v5.15.3/css/all.css" rel="stylesheet">
-    <link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+    {% if debug %}     
+    <link rel="shortcut icon" type="image/x-icon" href="/static/img/bug.ico" >
+    {% else %}        
+    <link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico" >
+    {% endif %}
 
     <link href="/static/css/facemon.css" rel="stylesheet">
     <link href="/static/css/jquery.timepicker.css" rel="stylesheet">
@@ -50,7 +51,7 @@
         <!-- Navigation -->
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <button type="button" id="sidebarCollapse" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -81,151 +82,18 @@
                     <!-- /.dropdown-messages -->
                 </li>
                 <!-- /.dropdown -->
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-tasks fa-fw"></i> <i class="fa fa-caret-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-tasks">
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <p>
-                                        <strong>Task 1</strong>
-                                        <span class="pull-right text-muted">40% Complete</span>
-                                    </p>
-                                    <div class="progress progress-striped active">
-                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                                            <span class="sr-only">40% Complete (success)</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <p>
-                                        <strong>Task 2</strong>
-                                        <span class="pull-right text-muted">20% Complete</span>
-                                    </p>
-                                    <div class="progress progress-striped active">
-                                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                                            <span class="sr-only">20% Complete</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <p>
-                                        <strong>Task 3</strong>
-                                        <span class="pull-right text-muted">60% Complete</span>
-                                    </p>
-                                    <div class="progress progress-striped active">
-                                        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
-                                            <span class="sr-only">60% Complete (warning)</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <p>
-                                        <strong>Task 4</strong>
-                                        <span class="pull-right text-muted">80% Complete</span>
-                                    </p>
-                                    <div class="progress progress-striped active">
-                                        <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-                                            <span class="sr-only">80% Complete (danger)</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a class="text-center" href="#">
-                                <strong>See All Tasks</strong>
-                                <i class="fa fa-angle-right"></i>
-                            </a>
-                        </li>
-                    </ul>
-                    <!-- /.dropdown-tasks -->
-                </li>
-                <!-- /.dropdown -->
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-bell fa-fw"></i> <i class="fa fa-caret-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-alerts">
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <i class="fa fa-comment fa-fw"></i> New Comment
-                                    <span class="pull-right text-muted small">4 minutes ago</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <i class="fa fa-twitter fa-fw"></i> 3 New Followers
-                                    <span class="pull-right text-muted small">12 minutes ago</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <i class="fa fa-envelope fa-fw"></i> Message Sent
-                                    <span class="pull-right text-muted small">4 minutes ago</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <i class="fa fa-tasks fa-fw"></i> New Task
-                                    <span class="pull-right text-muted small">4 minutes ago</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <i class="fa fa-upload fa-fw"></i> Server Rebooted
-                                    <span class="pull-right text-muted small">4 minutes ago</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a class="text-center" href="#">
-                                <strong>See All Alerts</strong>
-                                <i class="fa fa-angle-right"></i>
-                            </a>
-                        </li>
-                    </ul>
-                    <!-- /.dropdown-alerts -->
-                </li>
-                <!-- /.dropdown -->
 
             </ul>
             <!-- /.navbar-top-links -->
 
-            <div class="navbar-default sidebar" role="navigation">
-                <div class="sidebar-nav navbar-collapse">
+            <div class="navbar-default sidebar" id="sidebar" role="navigation" hidden-print>
+                <div id="sidebar-header">
+                    <h2 style="color: #337ab7; margin-left: 20px;">Menu</h2>
+                    <div id="dismiss" >
+                        <i class="fas fa-arrow-left"></i>
+                    </div>
+                </div>
+                <div class="">
                     <ul class="nav" id="side-menu">
                         <li class="sidebar-search">
                             <div class="input-group custom-search-form">
@@ -309,30 +177,55 @@
                 $(".modal").modal('hide')
             }
         });
-    
-        $(document).ready(function () {
+        $( document ).ready(function() {
             sethost("{{request.META.HTTP_HOST}}")
-    
-            //ShowTotalNotification()
-    
-            function ShowTotalNotification() {
-                if (Cookies.get("token") == null || Cookies.get("token") == "")
-                    return
-                request_data = {
-                    "token": Cookies.get("token"),
-                    "status": "unseen"
-                }
-    
-                host_request = gethost() + '/api/notification/getList'
-                ajaxRequest("POST", host_request, request_data, onGetNotificationSuccess, null)
+
+            if($(document).width() >= 768)
+            {
+                ShowSidebar()
             }
-    
-            function onGetNotificationSuccess(res) {
-                document.getElementById("lbl_numNotification").innerText = res.length
-            }
-    
+        })
+
+        $('#dismiss, .overlay').on('click', function () {
+            HideSidebar()
         });
+
+        $('#sidebarCollapse').on('click', function () {
+            if($('#sidebar').hasClass('active'))
+                HideSidebar()
+            else
+                ShowSidebar()
+        });
+
+        function ShowSidebar()
+        {
+            $('#sidebar').addClass('active');
+            $('.overlay').addClass('active');
+            $('.collapse.in').toggleClass('in');
+            $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+        }
+
+        function HideSidebar()
+        {
+            $('#sidebar').removeClass('active');
+            $('.overlay').removeClass('active');
+        }
     
+        function ShowTotalNotification() {
+            if (Cookies.get("token") == null || Cookies.get("token") == "")
+                return
+            request_data = {
+                "token": Cookies.get("token"),
+                "status": "unseen"
+            }
+
+            host_request = gethost() + '/api/notification/getList'
+            ajaxRequest("POST", host_request, request_data, onGetNotificationSuccess, null)
+        }
+
+        function onGetNotificationSuccess(res) {
+            document.getElementById("lbl_numNotification").innerText = res.length
+        }
     </script>
 </body>
 

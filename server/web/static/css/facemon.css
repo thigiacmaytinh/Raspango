@@ -143,3 +143,73 @@ input[type="radio"]{
   clip: auto;
   white-space: normal;
 }
+
+/* ---------------------------------------------------
+    SIDEBAR STYLE
+----------------------------------------------------- */
+
+#sidebar {
+  width: 250px;    
+  top: 0;
+  left: -250px;
+  /* height: 100vh; */
+  z-index: 1001;
+  color: #fff;
+}
+
+#sidebar-header
+{
+  display: none;
+}
+
+@media only screen and (max-device-width: 767px) {
+  #sidebar {
+    position: fixed;
+    transition: all 0.3s;
+  }
+
+  #sidebar.active
+  {    
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+  }
+
+  #sidebar-header
+  {
+    display: block;
+  }
+}
+
+#sidebar.active {
+  left: 0;
+}
+
+#dismiss {
+  width: 35px;
+  height: 35px;
+  line-height: 35px;
+  text-align: center;
+  background: #337ab7;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  -webkit-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  transition: all 0.3s;
+  /* padding: 10px; */
+}
+
+.overlay {
+  display: none;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 998;
+  opacity: 0;
+  transition: all 0.5s ease-in-out;
+}
+.overlay.active {
+  display: block;
+  opacity: 1;
+}
