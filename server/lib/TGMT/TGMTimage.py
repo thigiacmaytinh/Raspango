@@ -1,6 +1,6 @@
 from PIL import Image, ExifTags
 from api.util import *
-from django.conf import settings as raspango
+from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 import base64
 from api.apps import *
@@ -17,7 +17,7 @@ def ResizeImage(imgPath, desireWidth):
         img.save(imgPath)
     img.close()
 
-    if(width < raspango.FACE_MIN_SIZE):
+    if(width < settings.FACE_MIN_SIZE):
         return False
     return True
 
@@ -57,8 +57,8 @@ def SaveImageFromRequest(request, saveDir, fileName):
             return True
     elif request.method == 'POST' and request.FILES['selectedFile']:            
         uploadfile = request.FILES['selectedFile']
-        upload_folder_abs = os.path.join(raspango.MEDIA_ROOT, saveDir)
-        fs = FileSystemStorage(upload_folder_abs, raspango.MEDIA_URL)
+        upload_folder_abs = os.path.join(settings.MEDIA_ROOT, saveDir)
+        fs = FileSystemStorage(upload_folder_abs, settings.MEDIA_URL)
         filename = fs.save( fileName , uploadfile)
         # uploaded_file_url = fs.url(filename)
         return True
@@ -71,7 +71,7 @@ def SaveBase64ToImg(folder_name, file_name, imageData):
     if(imageData == None or imageData == "" ):
         return ""
     try:
-        upload_folder_abs = os.path.join(raspango.MEDIA_ROOT, folder_name)
+        upload_folder_abs = os.path.join(settings.MEDIA_ROOT, folder_name)
         if not os.path.exists(upload_folder_abs):
             os.makedirs(upload_folder_abs)
 

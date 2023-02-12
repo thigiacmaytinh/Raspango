@@ -1,12 +1,12 @@
 
 import os
-from django.conf import settings as raspango
+from django.conf import settings
 
 
 
 def PlaySound(fileName):
     import pygame
-    fileName = os.path.join(raspango.BASE_DIR, "web", "static", "mp3", fileName)
+    fileName = os.path.join(settings.BASE_DIR, "web", "static", "mp3", fileName)
     pygame.mixer.init()
     pygame.mixer.music.load(fileName)
     pygame.mixer.music.play()

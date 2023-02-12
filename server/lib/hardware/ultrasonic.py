@@ -2,7 +2,7 @@ import os
 import time
 import requests
 import json
-from django.conf import settings as raspango
+from django.conf import settings
 
 currentPath = os.path.abspath(__file__)
 IS_LINUX = currentPath[0] == '/'

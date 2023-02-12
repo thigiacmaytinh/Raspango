@@ -8,7 +8,7 @@ import hashlib
 import datetime
 from dateutil.parser import parse
 from api.apps import *
-from django.conf import settings as raspango
+from django.conf import settings
 import time
 from django.core.files.storage import FileSystemStorage
 from PIL import Image

@@ -1,6 +1,3 @@
-from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse, HttpResponseNotFound
-from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 import json
@@ -16,7 +13,7 @@ from lib.TGMT.TGMTemail import SendEmailInternal
 from lib.TGMT.TGMTsound import PlaySound
 from lib.TGMT.TGMTwebcam import *
 from lib.TGMT.TGMTimage import *
-from django.conf import settings as raspango
+from django.conf import settings
 import cv2
 import threading
 
@@ -27,7 +24,7 @@ def DetectFace(request):
     try:
         folder = "uploaded_image"
         _randFilename = datetime.datetime.utcnow().strftime("%Y-%m-%d_%H-%M-%S") + "_" + GenerateRandomString() + ".jpg"
-        uploaded_file_abs = os.path.join(raspango.MEDIA_ROOT, folder, _randFilename)
+        uploaded_file_abs = os.path.join(settings.MEDIA_ROOT, folder, _randFilename)
 
         SaveImageFromRequest(request, folder, _randFilename)
 

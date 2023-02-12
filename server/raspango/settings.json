@@ -1,6 +1,6 @@
 {
     "version" : "0.0.1",
-    "secrect_key" : "32jpdgsljfasgkkirqewhj23oy8fa7awui",
+    "secret_key" : "32jpdgsljfasgkkirqewhj23oy8fa7awui",
     "mongodb" : {
         "release" : {
             "host": "localhost",

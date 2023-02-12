@@ -1,11 +1,11 @@
 import os
 from threading import Thread, Lock
 import cv2
-from django.conf import settings as raspango
+from django.conf import settings
 import threading
 import time, datetime
 
-cascade = cv2.CascadeClassifier(os.path.join(raspango.BASE_DIR, "lib", "data", "lbpcascade_face_viscom.xml"))
+cascade = cv2.CascadeClassifier(os.path.join(settings.BASE_DIR, "lib", "data", "lbpcascade_face_viscom.xml"))
 if(cascade.empty()):
     print("cascade empty")
 
@@ -28,14 +28,14 @@ def DetectFaceByCascade(frame):
 ####################################################################################################
 
 def streamwebcam():
-    raspango.PLAY_WEBCAM = True
+    settings.PLAY_WEBCAM = True
     cam = cv2.VideoCapture(0)
 
-    while raspango.PLAY_WEBCAM:
-        raspango.WEBCAM_CONNECTED, frame = cam.read()
+    while settings.PLAY_WEBCAM:
+        settings.WEBCAM_CONNECTED, frame = cam.read()
 
         frame, rects = DetectFaceByCascade(frame)
-        raspango.NUM_FACE = len(rects)
+        settings.NUM_FACE = len(rects)
 
         (flag, encodedImage) = cv2.imencode(".jpg", frame)
 

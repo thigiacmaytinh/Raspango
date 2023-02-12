@@ -1,5 +1,5 @@
 from django.core.mail import send_mail
-from django.conf import settings as raspango
+from django.conf import settings
 import threading
 from django.utils.html import strip_tags
 
@@ -29,7 +29,7 @@ class EmailThread(threading.Thread):
     def run (self):
         send_mail(self.subject,
                 self.html_content,
-                raspango.EMAIL_SENDER,
+                settings.EMAIL_SENDER,
                 [self.recipient_list],
                 html_message = self.html_content,
                 fail_silently=False)

@@ -107,5 +107,5 @@ def GetParam(request, param, defaultValue=""):
 ####################################################################################################
 
 def printt(msg):
-    if(raspango.DEBUG):
+    if(settings.DEBUG):
         print(">>>>" + str(msg))

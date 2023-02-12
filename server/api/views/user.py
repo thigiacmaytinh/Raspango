@@ -15,7 +15,7 @@ from django.db.models import Q
 from lib.TGMT.TGMTemail import SendEmailInternal
 from api.views.loginsession import *
 from django.core import serializers
-from django.conf import settings as raspango
+from django.conf import settings
 
 ####################################################################################################
 
@@ -28,7 +28,7 @@ def login(request):
 
     try:
         _user = User.objects.get(email=_email, isDeleted=False)
-        if(not raspango.DEBUG and _user.password != hashed_password):
+        if(not settings.DEBUG and _user.password != hashed_password):
             return ErrorResponse("Không đúng email/password")
     except User.DoesNotExist:
         return ErrorResponse("Không đúng email/password")
@@ -55,7 +55,7 @@ def login(request):
         result = json.loads(_userJson)[0]
         result["token"] = jwt_token['token']
 
-        return JsonObjResponse(result)
+        return ObjResponse(result)
     except Exception as e:
         return ErrorResponse('Có lỗi: ' + str(e))
 
@@ -70,12 +70,7 @@ def logout(request):
         _token = request.POST.get('token')
         loginSession = LoginSession.objects.get(token = _token)
    
-        if(_image != ""):
-            _save_folder = "logout"
-            _file_name = _user_id + "_"
-            _imagePath = SaveBase64ToImg(_save_folder, _file_name, _image)
-        else:
-            _imagePath = ""
+
         loginSession.imageLogoutPath = _imagePath
         loginSession.logoutTime = datetime.datetime.utcnow()
         loginSession.save()
@@ -228,9 +223,6 @@ def Register(request):
     
        
         user.timeUpdate = datetime.datetime.utcnow()
-
-        if(_references != None and _references != ""):
-            user.references = _references
 
         user.save()
 
