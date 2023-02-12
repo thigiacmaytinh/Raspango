@@ -153,46 +153,6 @@
         </div>
     </div>
 
-
-    <!-- popup invite friend -->
-    <div class="modal fade" id="modal_invite" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content panel-yellow">
-                <div class="modal-header panel-heading">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title" id="lbl_modal_title">Giới thiệu cho bạn bè</h4>
-                </div>
-                <div class="modal-body panel-body">
-                    <p>Giới thiệu thành công bạn sẽ được tăng thêm 1 người trong danh sách khuôn mặt.
-                        Copy link bên dưới để gửi cho bạn bè
-                    </p>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <a href="https://checkinwebcam.com/register?references={{ email }}">https://checkinwebcam.com/register?references={{
-                                    email }}</a>
-                            </div>
-                        </div>
-
-                        <div class="col-md-12">
-                            <p>Hoặc điền email của bạn bè vào ô bên dưới và gửi</p>
-                            <div class="form-group">
-                                <input type="text" class="form-control" id="txt_friendEmail"
-                                    placeholder="Email của bạn bè*">
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <button id="btn_invite" class="btn btn-default btn-success pull-right"><span
-                                    class="fa fa-plus"></span> Gửi mail giới thiệu</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
 </body>
 <!-- jQuery -->
 <script src="/static/vendor/jquery/jquery.min.js"></script>
@@ -245,35 +205,6 @@
             document.getElementById("lbl_numNotification").innerText = res.length
         }
 
-
-        $("#btn_showModalInvite").click(function () {
-            $("#modal_invite").modal()
-        })
-
-        $("#btn_invite").click(function () {
-            if (!ValidateEmail($("#txt_friendEmail").val())) {
-                $("#modal_invite").modal("hide")
-                showError("Sai format email")
-                return
-            }
-            request_data = {
-                "email": $("#txt_friendEmail").val(),
-                "token": Cookies.get("token"),
-            }
-
-            host_request = gethost() + '/api/invite'
-            ajaxRequest("POST", host_request, request_data, onInviteSuccess, onInviteFailed)
-        })
-
-        function onInviteSuccess(res) {
-            $("#modal_invite").modal("hide")
-            showNotice(res.Success)
-        }
-
-        function onInviteFailed(res) {
-            $("#modal_invite").modal("hide")
-            showError(res["responseJSON"]["Error"])
-        }
     });
 
 </script>
