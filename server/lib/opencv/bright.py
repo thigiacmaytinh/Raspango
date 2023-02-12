@@ -1,7 +1,6 @@
 import cv2
 import numpy as np
 from numpy.linalg import norm
-import mediapipe as mp
 from api.apps import printt
 
 THRESH1 = 170

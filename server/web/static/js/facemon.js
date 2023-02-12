@@ -110,12 +110,20 @@ function saveExcel(data)
 }
 function genericFailCB(res)
 {
-    showError(res["responseJSON"]["Error"])
+    showError(GetErrorMessage(res))
 }
 
 function genericSuccessCB(res)
 {
     showNotice(res["Success"])
+}
+
+function GetErrorMessage(res)
+{
+    if(res["responseJSON"] == null || res["responseJSON"]["Error"] == null)
+        return "Server không phản hồi"
+    else
+        return res["responseJSON"]["Error"]
 }
 
 // string formatting

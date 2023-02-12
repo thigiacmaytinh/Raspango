@@ -1,7 +1,7 @@
 from django.apps import AppConfig
 from rest_framework.response import Response
 import json
-from django.conf import settings as raspango
+from django.conf import settings
 from django.core import serializers
 import datetime
 
@@ -53,7 +53,7 @@ class JsonResponse(Response):
 
 ####################################################################################################
 
-class JsonObjResponse(Response):
+class ObjResponse(Response):
     def __init__(self, jsonObj):
         Response.__init__(self,
             jsonObj,
