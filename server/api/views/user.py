@@ -1,8 +1,4 @@
-from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseNotFound
-from rest_framework.views import APIView
 from rest_framework.decorators import api_view
-from rest_framework.response import Response
 import json
 import hashlib
 import datetime
@@ -71,7 +67,6 @@ def logout(request):
         loginSession = LoginSession.objects.get(token = _token)
    
 
-        loginSession.imageLogoutPath = _imagePath
         loginSession.logoutTime = datetime.datetime.utcnow()
         loginSession.save()
 
@@ -99,29 +94,16 @@ def GetUser(request):
 
         loginSession = FindLoginSession(_token)
         if(datetime.datetime.utcnow() > loginSession.validTo or loginSession.email != "admin"):
-            return Response(
-            {'Error': "Token hết hạn, vui lòng đăng nhập lại"},
-            status=ERROR_CODE,
-            content_type="application/json"
-            )
+            return ErrorResponse("Token hết hạn, vui lòng đăng nhập lại")
 
         _username = request.POST.get('username')
         user = User.objects.get(username=_username, isDeleted=False)
 
         user.password = ""
 
-        return Response(
-            json.loads(user.to_json()),
-            status=SUCCESS_CODE,
-            content_type="application/json"
-            )
+        return JsonResponse(user.to_json())
     except Exception as e:
-            return Response(
-            {'Error': "Tìm thất bại: " + str(e)},
-            status=ERROR_CODE,
-            content_type="application/json"
-            )
-
+        return ErrorResponse(str(e))
 
 ####################################################################################################
 
@@ -166,28 +148,15 @@ def ResetPassword(request):
         try:
             user = User.objects.get(username=_username, isDeleted=False)
         except User.DoesNotExist:
-            return Response(
-                {'Error': "Không tìm thấy user: "+ _username},
-                status=ERROR_CODE,
-                content_type="application/json"
-            )
+            return ErrorResponse("Không tìm thấy user: "+ _username)
         if user:
             hashed_newpassword = HashPassword(_password)
             user.password = hashed_newpassword
             user.isPasswordChanged = False
             user.save()
-            return Response(
-                {'Success': "Đổi mật khẩu thành công"},
-                status=SUCCESS_CODE,
-                content_type="application/json"
-            )
+            return SuccessResponse("Đổi mật khẩu thành công" )
     except Exception as e:
-        return Response(
-            {'Error': "Thông tin không đúng, lỗi: " + str(e)},
-            status=ERROR_CODE,
-            content_type="application/json"
-            )
-
+        return ErrorResponse(str(e))
 
 ####################################################################################################
 
