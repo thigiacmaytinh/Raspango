@@ -18,7 +18,7 @@ from django.conf import settings
 @api_view(["POST"])
 def login(request):
     _email = request.POST.get('email').lower()
-    _password = request.POST.get('password').lower()
+    _password = request.POST.get('password')
 
     hashed_password = HashPassword(_password)
 
