@@ -31,6 +31,7 @@ class ApiConfig(AppConfig):
 
 class ErrorResponse(Response):
     def __init__(self, message):
+        printt(message)
         Response.__init__(self,
             {'Error': message},
             status=ERROR_CODE, content_type="application/json")
