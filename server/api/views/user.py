@@ -12,6 +12,7 @@ from lib.TGMT.TGMTemail import SendEmailInternal
 from api.views.loginsession import *
 from django.core import serializers
 from django.conf import settings
+from datetime import timedelta
 
 ####################################################################################################
 
@@ -33,14 +34,14 @@ def login(request):
         login_session = LoginSession(email = _email,
                                     fullname = _user.fullname,
                                     level = _user.level,                                    
-                                    loginTime = datetime.datetime.utcnow()
+                                    loginTime = utcnow()
                                     )
         login_session.save()
         payload = {
             'email': _email,
             'fullname' : _user.fullname,
             'level' : _user.level,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=365),
+            'exp': utcnow() + timedelta(days=365),
             'loginSession_pk' : str(login_session.pk)
         }
 
@@ -67,7 +68,7 @@ def logout(request):
         loginSession = LoginSession.objects.get(token = _token)
    
 
-        loginSession.logoutTime = datetime.datetime.utcnow()
+        loginSession.logoutTime = utcnow()
         loginSession.save()
 
         return SuccessResponse('Logout thành công')
@@ -93,7 +94,7 @@ def GetUser(request):
         _token = request.POST.get('token')
 
         loginSession = FindLoginSession(_token)
-        if(datetime.datetime.utcnow() > loginSession.validTo or loginSession.email != "admin"):
+        if(utcnow() > loginSession.validTo or loginSession.email != "admin"):
             return ErrorResponse("Token hết hạn, vui lòng đăng nhập lại")
 
         _username = request.POST.get('username')
@@ -176,7 +177,7 @@ def Register(request):
         except User.MultipleObjectsReturned:
             already_existed = True
         except User.DoesNotExist:
-            already_existed = False
+            pass
         
         hashed_password = HashPassword(_password)
         
@@ -191,7 +192,7 @@ def Register(request):
         user.phone = _phone        
     
        
-        user.timeUpdate = datetime.datetime.utcnow()
+        user.timeUpdate = utcnow()
 
         user.save()
 
@@ -200,8 +201,8 @@ def Register(request):
                                     fullname = user.fullname,
                                     level = user.level,
                                     purpose = "ConfirmEmail",
-                                    loginTime = datetime.datetime.utcnow(),
-                                    validTo = datetime.datetime.utcnow() + datetime.timedelta(days=7)
+                                    loginTime = utcnow(),
+                                    validTo = utcnow() + timedelta(days=7)
                                     )
         login_session.save()
         return SuccessResponse("Đăng ký thành công, vui lòng kiểm tra email để xác nhận")
