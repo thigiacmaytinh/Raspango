@@ -68,6 +68,10 @@ def facemask(request):
     permissions = ["Root", "Admin", "Gate", "Supporter"]
     return CheckToken(request, 'facemask.html', permissions)
 
+def yolov8(request):
+    permissions = ["Root", "Admin", "Gate", "Supporter"]
+    return CheckToken(request, 'yolov8.html', permissions)
+
 def brightness(request):
     permissions = ["Root", "Admin", "Gate", "Supporter"]
     return CheckToken(request, 'brightness.html', permissions)

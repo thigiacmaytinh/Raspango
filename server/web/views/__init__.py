@@ -10,4 +10,4 @@ from .views import index, login, logout, user,\
     video_feed, \
     stream, \
     brightness, \
-    upload
+    upload, yolov8

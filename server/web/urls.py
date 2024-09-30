@@ -25,5 +25,6 @@ urlpatterns = [
     url(r'^stream/$', views.stream),
     url(r'^upload/$', views.upload),
     url(r'^brightness/$', views.brightness),
+    url(r'^yolov8/$', views.yolov8),
 ]
 handler404 = views.notfound

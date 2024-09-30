@@ -14,4 +14,6 @@ urlpatterns = [
     url(r'^opencv/detectface$', views.DetectFace),
     url(r'^facemask/detect$', views.DetectFacemask),
     url(r'^brightness$', views.CheckBrightness),
+    url(r'^yolov8/detect$', views.DetectObject),
+
 ]
